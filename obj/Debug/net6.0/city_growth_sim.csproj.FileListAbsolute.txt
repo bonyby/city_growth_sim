@@ -1,0 +1,15 @@
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\obj\Debug\net6.0\city_growth_sim.csproj.AssemblyReference.cache
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\obj\Debug\net6.0\city_growth_sim.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\obj\Debug\net6.0\city_growth_sim.AssemblyInfoInputs.cache
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\obj\Debug\net6.0\city_growth_sim.AssemblyInfo.cs
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\obj\Debug\net6.0\city_growth_sim.csproj.CoreCompileInputs.cache
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\bin\Debug\net6.0\city_growth_sim.exe
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\bin\Debug\net6.0\city_growth_sim.deps.json
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\bin\Debug\net6.0\city_growth_sim.runtimeconfig.json
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\bin\Debug\net6.0\city_growth_sim.dll
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\bin\Debug\net6.0\city_growth_sim.pdb
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\obj\Debug\net6.0\city_growth_sim.dll
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\obj\Debug\net6.0\refint\city_growth_sim.dll
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\obj\Debug\net6.0\city_growth_sim.pdb
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\obj\Debug\net6.0\city_growth_sim.genruntimeconfig.cache
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\obj\Debug\net6.0\ref\city_growth_sim.dll
