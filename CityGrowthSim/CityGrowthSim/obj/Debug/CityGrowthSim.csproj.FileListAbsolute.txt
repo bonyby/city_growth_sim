@@ -1,0 +1,11 @@
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\CityGrowthSim\CityGrowthSim\bin\Debug\CityGrowthSim.exe.config
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\CityGrowthSim\CityGrowthSim\bin\Debug\CityGrowthSim.exe
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\CityGrowthSim\CityGrowthSim\bin\Debug\CityGrowthSim.pdb
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\CityGrowthSim\CityGrowthSim\obj\Debug\CityGrowthSim.csproj.AssemblyReference.cache
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\CityGrowthSim\CityGrowthSim\obj\Debug\CityGrowthSim.csproj.SuggestedBindingRedirects.cache
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\CityGrowthSim\CityGrowthSim\obj\Debug\CityGrowthSim.Form1.resources
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\CityGrowthSim\CityGrowthSim\obj\Debug\CityGrowthSim.Properties.Resources.resources
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\CityGrowthSim\CityGrowthSim\obj\Debug\CityGrowthSim.csproj.GenerateResource.cache
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\CityGrowthSim\CityGrowthSim\obj\Debug\CityGrowthSim.csproj.CoreCompileInputs.cache
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\CityGrowthSim\CityGrowthSim\obj\Debug\CityGrowthSim.exe
+C:\Users\boava\Documents\Projects\city_growth_sim\city_growth_sim\CityGrowthSim\CityGrowthSim\obj\Debug\CityGrowthSim.pdb
