@@ -7,12 +7,18 @@ using System.Threading.Tasks;
 
 namespace CityGrowthSim.Structures
 {
+    /// <summary>
+    /// Interface for structure. Consider using the BaseStructure for inheritance instead of implementing this directly to ensure all criteria is satisfied
+    /// </summary>
     public interface IStructure
     {
         /// <summary>
         /// Array containing all corner points of the structure itself relative to its position
+        /// Only positive values allowed. Negative values would mean either left to or above (or both)
+        /// compared to the position, which in turn would change the position. Negative values should
+        /// be set to 0
         /// </summary>
-        Point[] Corners { get; }
+        Point[] Corners { get; set; }
         
         /// <summary>
         /// Position of the top left corner of the bounding box
