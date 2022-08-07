@@ -20,7 +20,9 @@ namespace CityGrowthSim
         public Main()
         {
             InitializeComponent();
-            Structures.Add(new House());
+            Point[] corners = new Point[] { new Point(0, 2), new Point(121, 5), new Point(143, 67), new Point(0, 85) };
+            House h = new House(new Point(10, 42), corners);
+            Structures.Add(h);
         }
 
         private void Form1_Load(object sender, EventArgs e)

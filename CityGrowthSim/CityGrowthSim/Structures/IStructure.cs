@@ -19,7 +19,12 @@ namespace CityGrowthSim.Structures
         /// be set to 0
         /// </summary>
         Point[] Corners { get; set; }
-        
+
+        /// <summary>
+        /// Global position of the corners
+        /// </summary>
+        Point[] GlobalCorners { get; }
+
         /// <summary>
         /// Position of the top left corner of the bounding box
         /// </summary>

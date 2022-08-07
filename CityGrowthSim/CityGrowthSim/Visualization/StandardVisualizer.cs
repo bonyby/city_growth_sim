@@ -25,7 +25,7 @@ namespace CityGrowthSim.Visualization
 
             foreach (IStructure s in structures)
             {
-                g.FillPolygon(b, s.Corners);
+                g.FillPolygon(b, s.GlobalCorners);
             }
 
             g.Dispose();
