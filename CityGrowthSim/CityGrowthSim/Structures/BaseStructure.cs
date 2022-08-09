@@ -13,6 +13,11 @@ namespace CityGrowthSim.Structures
         Point position;
         Point[] corners;
 
+        public BaseStructure(Point position)
+        {
+            this.position = position;
+        }
+
         public BaseStructure(Point position, Point[] corners)
         {
             this.position = position;

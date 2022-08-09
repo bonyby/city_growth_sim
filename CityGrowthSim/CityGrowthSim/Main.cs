@@ -17,12 +17,11 @@ namespace CityGrowthSim
         public Graphics Graphics => this.CreateGraphics();
         public List<IStructure> Structures { get; } = new List<IStructure>();
 
+        IVisualizer vis;
+
         public Main()
         {
             InitializeComponent();
-            Point[] corners = new Point[] { new Point(0, 2), new Point(121, 5), new Point(143, 67), new Point(0, 85) };
-            House h = new House(new Point(10, 42), corners);
-            Structures.Add(h);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -31,7 +30,12 @@ namespace CityGrowthSim
 
         private void button1_Click(object sender, EventArgs e)
         {
-            IVisualizer vis = new StandardVisualizer(this);
+            Random random = new Random();
+            House h = new House(new Point(random.Next(100), random.Next(100)));
+            Structures.Add(h);
+
+            if (vis == null) { vis = new StandardVisualizer(this); }
+
             vis.DrawWorld();
         }
     }

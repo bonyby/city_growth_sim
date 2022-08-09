@@ -1,14 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using CityGrowthSim.Structures.Shapes;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CityGrowthSim.Structures
 {
     internal class House : BaseStructure
     {
-        public House(Point position, Point[] corners) : base(position, corners) { }
+        IShape shape;
+
+        public House(Point position) : base(position)
+        {
+            shape = SelectShape();
+            Corners = shape.GenerateCorners(50, 50);
+        }
+
+        /// <summary>
+        /// Select a fitting shape of the house for the current position
+        /// </summary>
+        /// <returns>A Shape object</returns>
+        private IShape SelectShape()
+        {
+            return new RectangleShape();
+        }
     }
 }
