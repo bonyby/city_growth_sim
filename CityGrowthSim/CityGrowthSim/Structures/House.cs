@@ -19,7 +19,8 @@ namespace CityGrowthSim.Structures
         /// <returns>A Shape object</returns>
         private IShape SelectShape()
         {
-            return new RectangleShape();
+            //return new RectangleShape();
+            return new LShape();
         }
     }
 }

@@ -59,6 +59,7 @@
     <Compile Include="Structures\House.cs" />
     <Compile Include="Structures\IStructure.cs" />
     <Compile Include="Structures\Shapes\IShape.cs" />
+    <Compile Include="Structures\Shapes\LShape.cs" />
     <Compile Include="Structures\Shapes\RectangleShape.cs" />
     <Compile Include="Visualization\StandardVisualizer.cs" />
     <Compile Include="Visualization\IVisualizer.cs" />

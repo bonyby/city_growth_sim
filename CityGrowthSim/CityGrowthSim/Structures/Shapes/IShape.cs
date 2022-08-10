@@ -14,8 +14,8 @@ namespace CityGrowthSim.Structures.Shapes
         /// Generates an array of corners complying with the given shape.
         /// Points are ordered based on drawing order.
         /// </summary>
-        /// <param name="width">Width of the bounding box. Is set to min. required width if less</param>
-        /// <param name="height">Height og the bounding box. Is set to min. required height if less</param>
+        /// <param name="width">Width of the bounding box</param>
+        /// <param name="height">Height og the bounding box</param>
         /// <returns>Array of Point objects</returns>
         Point[] GenerateCorners(uint width, uint height);
     }

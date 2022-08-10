@@ -31,7 +31,7 @@ namespace CityGrowthSim
         private void button1_Click(object sender, EventArgs e)
         {
             Random random = new Random();
-            House h = new House(new Point(random.Next(100), random.Next(100)));
+            House h = new House(new Point(random.Next(350), random.Next(350)));
             Structures.Add(h);
 
             if (vis == null) { vis = new StandardVisualizer(this); }
