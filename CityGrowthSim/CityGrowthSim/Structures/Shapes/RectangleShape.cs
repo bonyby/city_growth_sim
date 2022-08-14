@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 
 namespace CityGrowthSim.Structures.Shapes
 {
-    internal class RectangleShape : IShape
+    internal class RectangleShape : BaseShape
     {
         private uint minWidth = 5;
         private uint minHeight = 5;
 
-        public Point[] GenerateCorners(uint width, uint height)
+        public RectangleShape(Random random) : base(random) { }
+
+        public override Point[] GenerateCorners(uint width, uint height)
         {
             if (width <= minWidth) { width = minWidth; }
             if (height <= minHeight) { height = minHeight; }

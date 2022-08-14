@@ -26,6 +26,15 @@ namespace CityGrowthSim.Structures
         Point[] GlobalCorners { get; }
 
         /// <summary>
+        /// Rotates and updates the corners of the structure based on the supplied degrees.
+        /// Rotates around corner centroid (center of corners), NOT center of bounding box.
+        /// A positive value rotates clockwise, a negative value rotates counterclockwise.
+        /// </summary>
+        /// <param name="degrees">Desired rotation in degrees</param>
+        /// <returns>Point[] array containing updated global corner positions</returns>
+        Point[] RotateCorners(int degrees);
+
+        /// <summary>
         /// Position of the top left corner of the bounding box
         /// </summary>
         Point Position { get; }

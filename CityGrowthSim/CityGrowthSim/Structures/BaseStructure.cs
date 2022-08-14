@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CityGrowthSim.Utility;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CityGrowthSim.Structures
 {
-    internal class BaseStructure : IStructure
+    internal abstract class BaseStructure : IStructure
     {
 
         Point position;
@@ -89,6 +90,12 @@ namespace CityGrowthSim.Structures
                 }
                 return down.Y - up.Y;
             }
+        }
+
+        public Point[] RotateCorners(int degrees)
+        {
+            Corners = PointUtility.RotatePointsAroundCentroid(Corners, degrees);
+            return GlobalCorners;
         }
     }
 }

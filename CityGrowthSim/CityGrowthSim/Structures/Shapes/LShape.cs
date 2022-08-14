@@ -7,19 +7,21 @@ using System.Threading.Tasks;
 
 namespace CityGrowthSim.Structures.Shapes
 {
-    internal class LShape : IShape
+    internal class LShape : BaseShape
     {
         private uint minWidth = 15, sideMinWidth = 8;
         private uint minHeight = 10, sideMinHeight = 5;
         private uint minWidthDiff = 7;
 
-        public Point[] GenerateCorners(uint width, uint height)
+        public LShape(Random random) : base(random) { }
+
+        public override Point[] GenerateCorners(uint width, uint height)
         {
             if (width <= minWidth) { width = minWidth; }
             if (height <= minHeight) { height = minHeight; }
 
             Random random = new Random();
-            
+
             // Width and height of main shape
             int w1 = random.Next((int)minWidth, (int)(width / 2));
             int h1 = random.Next((int)minHeight, (int)(height / 2));
@@ -32,9 +34,6 @@ namespace CityGrowthSim.Structures.Shapes
             Point[] points;
             if (random.Next(2) == 0) { points = new Point[] { new Point(0, 0), new Point(w1, 0), new Point(w1, h1), new Point(w2, h1), new Point(w2, h1 + h2), new Point(0, h1 + h2) }; }
             else { points = new Point[] { new Point(0, 0), new Point(w1, 0), new Point(w1, h1 + h2), new Point(w1 - w2, h1 + h2), new Point(w1 - w2, h1), new Point(0, h1) }; }
-
-            // Rotate shape
-            // TODO
 
             return points;
         }

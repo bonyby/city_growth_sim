@@ -19,8 +19,9 @@ namespace CityGrowthSim.Structures
         /// <returns>A Shape object</returns>
         private IShape SelectShape()
         {
+            return null; // TODO: get Random object from Main to pass onto Shape constructor
             //return new RectangleShape();
-            return new LShape();
+            //return new LShape();
         }
     }
 }
