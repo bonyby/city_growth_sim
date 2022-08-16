@@ -31,11 +31,13 @@ namespace CityGrowthSim.Structures
             set
             {
                 corners = value;
-                for (int i = 0; i < corners.Length; i++)
-                {
-                    if (corners[i].X < 0) { corners[i].X = 0; }
-                    if (corners[i].Y < 0) { corners[i].Y = 0; }
-                }
+                // Might need to revisit. Corners might have negative coordinates after rotating.
+                // Maybe offset all other points?
+                //for (int i = 0; i < corners.Length; i++)
+                //{
+                //    if (corners[i].X < 0) { corners[i].X = 0; }
+                //    if (corners[i].Y < 0) { corners[i].Y = 0; }
+                //}
             }
         }
 
@@ -94,7 +96,7 @@ namespace CityGrowthSim.Structures
 
         public Point[] RotateCorners(int degrees)
         {
-            Corners = PointUtility.RotatePointsAroundCentroid(Corners, degrees);
+            Corners = PointUtility.RotatePointsAroundCentroid(Corners, degrees); // Points might have negative coordinates, so 
             return GlobalCorners;
         }
     }
