@@ -48,6 +48,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Factories\PersistentObjectsFactory.cs" />
+    <Compile Include="Factories\ShapeFactory.cs" />
+    <Compile Include="Factories\StructureFactory.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>

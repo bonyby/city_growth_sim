@@ -1,4 +1,5 @@
 ﻿using CityGrowthSim.Structures.Shapes;
+using System;
 using System.Drawing;
 
 namespace CityGrowthSim.Structures
@@ -7,20 +8,10 @@ namespace CityGrowthSim.Structures
     {
         IShape shape;
 
-        public House(Point position) : base(position)
+        public House(Point position, IShape shape) : base(position)
         {
-            shape = SelectShape();
-            Corners = shape.GenerateCorners(50, 50);
-        }
-
-        /// <summary>
-        /// Select a fitting shape of the house for the current position
-        /// </summary>
-        /// <returns>A Shape object</returns>
-        private IShape SelectShape()
-        {
-            return new RectangleShape(new System.Random());
-            //return new LShape();
+            this.shape = shape;
+            Corners = this.shape.GenerateCorners(50, 50);
         }
     }
 }

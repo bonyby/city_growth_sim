@@ -35,9 +35,8 @@ namespace CityGrowthSim
         private void button1_Click(object sender, EventArgs e)
         {
             Random random = persistentFact.CreateRandom();
-            House h = new House(new Point(random.Next(750), random.Next(500)));
-            //h.RotateCorners(0);
-            Structures.Add(h);
+            StructureFactory structFact = persistentFact.CreateStructureFactory();
+            Structures.Add(structFact.CreateHouse());
 
             if (vis == null) { vis = new StandardVisualizer(this); }
 
