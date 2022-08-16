@@ -19,6 +19,7 @@ namespace CityGrowthSim
         public List<IStructure> Structures { get; } = new List<IStructure>();
 
         PersistentObjectsFactory persistentFact;
+        StructureFactory structFact;
         IVisualizer vis;
 
         public Main()
@@ -26,6 +27,8 @@ namespace CityGrowthSim
             InitializeComponent();
 
             persistentFact = new PersistentObjectsFactory(this);
+            structFact = persistentFact.CreateStructureFactory();
+            vis = persistentFact.CreateVisualizer();
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -34,12 +37,7 @@ namespace CityGrowthSim
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Random random = persistentFact.CreateRandom();
-            StructureFactory structFact = persistentFact.CreateStructureFactory();
             Structures.Add(structFact.CreateHouse());
-
-            if (vis == null) { vis = new StandardVisualizer(this); }
-
             vis.DrawWorld();
         }
     }
