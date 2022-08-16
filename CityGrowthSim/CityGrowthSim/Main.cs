@@ -1,4 +1,5 @@
-﻿using CityGrowthSim.Structures;
+﻿using CityGrowthSim.Factories;
+using CityGrowthSim.Structures;
 using CityGrowthSim.Visualization;
 using System;
 using System.Collections.Generic;
@@ -17,11 +18,14 @@ namespace CityGrowthSim
         public Graphics Graphics => this.CreateGraphics();
         public List<IStructure> Structures { get; } = new List<IStructure>();
 
+        PersistentObjectsFactory persistentFact;
         IVisualizer vis;
 
         public Main()
         {
             InitializeComponent();
+
+            persistentFact = new PersistentObjectsFactory(this);
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -30,7 +34,7 @@ namespace CityGrowthSim
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Random random = new Random();
+            Random random = persistentFact.CreateRandom();
             House h = new House(new Point(random.Next(750), random.Next(500)));
             //h.RotateCorners(0);
             Structures.Add(h);
