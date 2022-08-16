@@ -24,7 +24,7 @@ namespace CityGrowthSim.Factories
         /// <returns>Shape object</returns>
         public IShape CreateShape(String type)
         {
-            return new RectangleShape(random); // TODO: should be based on type-string
+            return new LShape(random); // TODO: should be based on type-string
         }
     }
 }
