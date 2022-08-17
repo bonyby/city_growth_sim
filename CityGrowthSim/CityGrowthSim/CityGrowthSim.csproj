@@ -67,6 +67,7 @@
     <Compile Include="Structures\Shapes\LShape.cs" />
     <Compile Include="Structures\Shapes\RectangleShape.cs" />
     <Compile Include="Utility\PointUtility.cs" />
+    <Compile Include="Utility\RandomWeightedSelection\RandomWeightedSelector.cs" />
     <Compile Include="Visualization\StandardVisualizer.cs" />
     <Compile Include="Visualization\IVisualizer.cs" />
     <EmbeddedResource Include="Main.resx">
