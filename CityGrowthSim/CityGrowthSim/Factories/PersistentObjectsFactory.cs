@@ -29,13 +29,20 @@ namespace CityGrowthSim.Factories
             {
                 string seed = settings.GetSettingsValue("RandomObjectSeed");
 
+                int numb;
+                bool is32BitNumber = int.TryParse(seed, out numb);
                 // TODO: check if seed is a 32-bit number. Create with seed if true, create random if not
 
-                if (seed == null || seed.ToLower() == "random") random = new Random();
+                if (seed == null || seed.ToLower() == "random" || !is32BitNumber) random = new Random();
                 else
                 {
-                    
+                    random = new Random(numb);
                 }
+            }
+
+            for (int i = 0; i < 5; i++)
+            {
+                Console.WriteLine(String.Format("Number {0}: {1}", i, random.Next(1000)));
             }
 
             return random;
