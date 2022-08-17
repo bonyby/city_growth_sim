@@ -15,10 +15,6 @@ namespace CityGrowthSim.Settings
         public SettingsManager()
         {
             ReadSettings();
-            foreach (KeyValuePair<string, string> entry in settings)
-            {
-                Console.WriteLine(string.Format("Entry: <{0}, {1}>", entry.Key, entry.Value));
-            }
         }
 
         private void ReadSettings()
@@ -31,17 +27,33 @@ namespace CityGrowthSim.Settings
             // Add each valid line to settings dictionary
             foreach (string line in lines)
             {
-                if (line.StartsWith("//") || line.Length == 0) continue; // Comment or empty line
+                string l = line.Replace(" ", "");
+                if (l.StartsWith("//") || l.Length == 0) continue; // Comment or empty line
 
-                if (line.Contains("="))
+                if (l.Contains("="))
                 {
-                    string[] ls = line.Split('=');
+                    string[] ls = l.Split('=');
 
                     if (ls.Length == 2) { settings.Add(ls[0], ls[1]); continue; } // Invalid if length != 2
                 }
 
                 Console.Error.WriteLine(string.Format("Invalid Settings Entry: '{0}'", line)); // Invalid
             }
+        }
+
+        /// <summary>
+        /// Finds the string value for the given string key. Returns null if not found.
+        /// </summary>
+        /// <param name="key">Key for the key-value pair</param>
+        /// <returns>String value. Null if not found</returns>
+        public string GetSettingsValue(string key)
+        {
+            if (key == null) return null;
+
+            string value;
+            settings.TryGetValue(key, out value);
+            
+            return value;
         }
     }
 }
