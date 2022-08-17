@@ -1,4 +1,5 @@
-﻿using CityGrowthSim.Visualization;
+﻿using CityGrowthSim.Settings;
+using CityGrowthSim.Visualization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,11 +14,13 @@ namespace CityGrowthSim.Factories
         Random random;
         ShapeFactory shapeFact;
         StructureFactory structFact;
+        SettingsManager settings;
         IVisualizer visualizer;
 
         public PersistentObjectsFactory(Main main)
         {
             this.main = main;
+            CreateSettingsManager();
         }
 
         public Random CreateRandom()
@@ -42,6 +45,12 @@ namespace CityGrowthSim.Factories
         {
             if (shapeFact == null) shapeFact = new ShapeFactory(CreateRandom());
             return shapeFact;
+        }
+
+        public SettingsManager CreateSettingsManager()
+        {
+            if (settings == null) settings = new SettingsManager();
+            return settings;
         }
     }
 }

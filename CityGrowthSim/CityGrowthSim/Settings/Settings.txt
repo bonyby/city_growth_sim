@@ -1,0 +1,4 @@
+﻿// PERSISTENT OBJECTS SETTINGS
+
+// either random or a 32-bit number
+RandomObjectSeed=random
