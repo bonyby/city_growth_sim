@@ -25,7 +25,19 @@ namespace CityGrowthSim.Factories
 
         public Random CreateRandom()
         {
-            if (random == null) random = new Random(); // Should seed based on settings
+            if (random == null)
+            {
+                string seed = settings.GetSettingsValue("RandomObjectSeed");
+
+                // TODO: check if seed is a 32-bit number. Create with seed if true, create random if not
+
+                if (seed == null || seed.ToLower() == "random") random = new Random();
+                else
+                {
+                    
+                }
+            }
+
             return random;
         }
 
