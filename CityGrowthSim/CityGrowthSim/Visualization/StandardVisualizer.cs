@@ -21,6 +21,7 @@ namespace CityGrowthSim.Visualization
         {
             Brush b = new SolidBrush(Color.Black);
             Graphics g = main.Graphics;
+            g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
             List<IStructure> structures = main.Structures;
 
             foreach (IStructure s in structures)
