@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CityGrowthSim.Settings
+namespace CityGrowthSim.Managers.Settings
 {
     internal class SettingsManager
     {
-        const string RELATIVE_FILE_PATH = "..\\..\\Settings\\Settings.txt";
+        const string RELATIVE_FILE_PATH = "..\\..\\Managers\\Settings\\Settings.txt";
         Dictionary<string, string> settings;
 
         public SettingsManager()
@@ -53,6 +53,8 @@ namespace CityGrowthSim.Settings
             string value;
             settings.TryGetValue(key, out value);
             
+            if (value == null) Console.Error.WriteLine(string.Format("'{0}' not found in settings. Check spelling and capital letters.", key));
+
             return value;
         }
     }

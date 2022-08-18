@@ -56,9 +56,10 @@
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
+    <Compile Include="Managers\TimeManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Settings\SettingsManager.cs" />
+    <Compile Include="Managers\Settings\SettingsManager.cs" />
     <Compile Include="Structures\BaseStructure.cs" />
     <Compile Include="Structures\House.cs" />
     <Compile Include="Structures\IStructure.cs" />
@@ -97,7 +98,7 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Settings\Settings.txt" />
+    <Content Include="Managers\Settings\Settings.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,4 +1,5 @@
-﻿using CityGrowthSim.Settings;
+﻿using CityGrowthSim.Managers;
+using CityGrowthSim.Managers.Settings;
 using CityGrowthSim.Visualization;
 using System;
 using System.Collections.Generic;
@@ -11,16 +12,19 @@ namespace CityGrowthSim.Factories
     internal class PersistentObjectsFactory
     {
         Main main;
+        SettingsManager settings;
+        TimeManager time;
+
         Random random;
         ShapeFactory shapeFact;
         StructureFactory structFact;
-        SettingsManager settings;
         IVisualizer visualizer;
 
         public PersistentObjectsFactory(Main main)
         {
             this.main = main;
             CreateSettingsManager();
+            CreateTimeManager();
         }
 
         public Random CreateRandom()
@@ -64,6 +68,21 @@ namespace CityGrowthSim.Factories
         {
             if (settings == null) settings = new SettingsManager();
             return settings;
+        }
+
+        public TimeManager CreateTimeManager()
+        {
+            string hzString = settings.GetSettingsValue("SimulationHz");
+
+            if (hzString == null) { return null; }
+
+            int hz;
+            bool isInt = int.TryParse(hzString, out hz);
+
+            if (!isInt || hz <= 0) { Console.Error.WriteLine(string.Format("Not a valid simulationHz (should be an integer n > 0): {0}", hz)); return null; }
+
+            if (time == null) time = new TimeManager(hz);
+            return time;
         }
     }
 }
