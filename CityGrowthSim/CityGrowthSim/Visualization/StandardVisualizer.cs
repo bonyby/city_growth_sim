@@ -1,6 +1,7 @@
 ﻿using CityGrowthSim.City;
 using CityGrowthSim.City.Structures;
 using CityGrowthSim.Managers;
+using CityGrowthSim.Visualization.StructuresStrategies;
 using CityGrowthSim.Visualization.TerrainStrategies;
 using System;
 using System.Collections.Generic;
@@ -15,16 +16,17 @@ namespace CityGrowthSim.Visualization
     {
         Main main;
         private TimeManager timeManager;
-        private CityPlanner cityPlanner;
-        private ITerrainVisualizationStrategy terrainStrat;
 
-        public StandardVisualizer(Main main, TimeManager timeManager, CityPlanner cityPlanner, ITerrainVisualizationStrategy terrainStrat)
+        private ITerrainVisualizationStrategy terrainStrat;
+        private IStructuresVisualizationStrategy structuresStrat;
+
+        public StandardVisualizer(Main main, TimeManager timeManager, ITerrainVisualizationStrategy terrainStrat, IStructuresVisualizationStrategy structuresStrat)
         {
             this.main = main;
             this.timeManager = timeManager;
-            this.cityPlanner = cityPlanner;
 
             this.terrainStrat = terrainStrat;
+            this.structuresStrat = structuresStrat;
 
             timeManager.UpdateReached += TimeManager_UpdateReached;
         }
@@ -36,28 +38,23 @@ namespace CityGrowthSim.Visualization
 
         public void DrawWorld()
         {
+            // Setup
             Graphics graphics = main.Graphics;
+
             Size formSize = main.Size;
             Bitmap bitmap = new Bitmap(formSize.Width, formSize.Height);
             Graphics g = Graphics.FromImage(bitmap);
-            g.Clear(Color.White);
-
-            terrainStrat.DrawTerrain(g);
-
-            Brush b = new SolidBrush(Color.Black);
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
-            List<IStructure> structures = cityPlanner.GetAllStructures();
-
-            foreach (IStructure s in structures)
-            {
-                g.FillPolygon(b, s.GlobalCorners);
-            }
-
+            
+            // Reset and draw
+            g.Clear(Color.White);
+            terrainStrat.DrawTerrain(g);
+            structuresStrat.DrawStructures(g);
             graphics.DrawImage(bitmap, 0, 0);
 
+            // Disposal
             g.Dispose();
             graphics.Dispose();
-            b.Dispose();
         }
     }
 }

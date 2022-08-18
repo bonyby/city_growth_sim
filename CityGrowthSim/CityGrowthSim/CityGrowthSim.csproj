@@ -73,6 +73,8 @@
     <Compile Include="Utility\RandomWeightedSelection\RandomWeightedSelector.cs" />
     <Compile Include="Visualization\StandardVisualizer.cs" />
     <Compile Include="Visualization\IVisualizer.cs" />
+    <Compile Include="Visualization\StructuresStrategies\IStructuresVisualizationStrategy.cs" />
+    <Compile Include="Visualization\StructuresStrategies\SolidColorStructuresVisualizationStrategy.cs" />
     <Compile Include="Visualization\TerrainStrategies\ITerrainVisualizationStrategy.cs" />
     <Compile Include="Visualization\TerrainStrategies\SolidColorTerrainVisualizationStrategy.cs" />
     <EmbeddedResource Include="Main.resx">

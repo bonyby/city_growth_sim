@@ -2,13 +2,10 @@
 using CityGrowthSim.Managers;
 using CityGrowthSim.Managers.Settings;
 using CityGrowthSim.Visualization;
+using CityGrowthSim.Visualization.StructuresStrategies;
 using CityGrowthSim.Visualization.TerrainStrategies;
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CityGrowthSim.Factories
 {
@@ -59,8 +56,9 @@ namespace CityGrowthSim.Factories
             {
                 // TODO: Strategies, colors etc. should be selected through preferences/settings at some point
                 ITerrainVisualizationStrategy terrainStrat = new SolidColorTerrainVisualizationStrategy(Color.LawnGreen);
+                IStructuresVisualizationStrategy structuresStrat = new SolidColorStructuresVisualizationStrategy(Color.Black, CreateCityPlanner());
 
-                visualizer = new StandardVisualizer(main, CreateTimeManager(), CreateCityPlanner(), terrainStrat);
+                visualizer = new StandardVisualizer(main, CreateTimeManager(), terrainStrat, structuresStrat);
             }
             return visualizer;
         }
