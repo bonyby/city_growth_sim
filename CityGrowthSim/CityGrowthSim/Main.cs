@@ -1,5 +1,5 @@
-﻿using CityGrowthSim.Factories;
-using CityGrowthSim.Structures;
+﻿using CityGrowthSim.City.Structures;
+using CityGrowthSim.Factories;
 using CityGrowthSim.Utility.RandomWeightedSelection;
 using CityGrowthSim.Visualization;
 using System;

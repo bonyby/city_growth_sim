@@ -1,8 +1,8 @@
-﻿using CityGrowthSim.Structures.Shapes;
+﻿using CityGrowthSim.City.Structures.Shapes;
 using System;
 using System.Drawing;
 
-namespace CityGrowthSim.Structures
+namespace CityGrowthSim.City.Structures
 {
     internal class House : BaseStructure
     {

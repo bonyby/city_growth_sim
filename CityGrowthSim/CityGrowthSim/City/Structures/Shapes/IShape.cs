@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CityGrowthSim.Structures.Shapes
+namespace CityGrowthSim.City.Structures.Shapes
 {
-    
+
     internal interface IShape
     {
         /// <summary>

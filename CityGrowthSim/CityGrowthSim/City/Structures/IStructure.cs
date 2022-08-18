@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CityGrowthSim.Structures
+namespace CityGrowthSim.City.Structures
 {
     /// <summary>
     /// Interface for structure. Consider using the BaseStructure for inheritance instead of implementing this directly to ensure all criteria is satisfied

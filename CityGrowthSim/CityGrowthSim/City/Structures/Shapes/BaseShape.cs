@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CityGrowthSim.Structures.Shapes
+namespace CityGrowthSim.City.Structures.Shapes
 {
     internal abstract class BaseShape : IShape
     {
@@ -13,7 +13,7 @@ namespace CityGrowthSim.Structures.Shapes
 
         public BaseShape(Random random)
         {
-            this.Random = random;
+            Random = random;
         }
 
         public abstract Point[] GenerateCorners(uint width, uint height);

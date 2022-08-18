@@ -1,4 +1,4 @@
-﻿using CityGrowthSim.Structures;
+﻿using CityGrowthSim.City.Structures;
 using System;
 using System.Collections.Generic;
 using System.Drawing;

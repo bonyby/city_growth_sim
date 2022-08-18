@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CityGrowthSim.Structures
+namespace CityGrowthSim.City.Structures
 {
     internal abstract class BaseStructure : IStructure
     {
@@ -53,8 +53,8 @@ namespace CityGrowthSim.Structures
 
                 for (int i = 0; i < cs.Length; i++)
                 {
-                    cs[i].X += this.Position.X;
-                    cs[i].Y += this.Position.Y;
+                    cs[i].X += Position.X;
+                    cs[i].Y += Position.Y;
                 }
 
                 return cs;

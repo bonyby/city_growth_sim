@@ -1,10 +1,6 @@
-﻿using CityGrowthSim.Structures.Shapes;
+﻿using CityGrowthSim.City.Structures.Shapes;
 using CityGrowthSim.Utility.RandomWeightedSelection;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CityGrowthSim.Factories
 {
