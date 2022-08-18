@@ -47,6 +47,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="City\CityPlanner.cs" />
+    <Compile Include="City\Neighbourhoods\Neighbourhood.cs" />
     <Compile Include="Factories\PersistentObjectsFactory.cs" />
     <Compile Include="Factories\ShapeFactory.cs" />
     <Compile Include="Factories\StructureFactory.cs" />

@@ -1,4 +1,5 @@
-﻿using CityGrowthSim.Managers;
+﻿using CityGrowthSim.City;
+using CityGrowthSim.Managers;
 using CityGrowthSim.Managers.Settings;
 using CityGrowthSim.Visualization;
 using System;
@@ -12,26 +13,29 @@ namespace CityGrowthSim.Factories
     internal class PersistentObjectsFactory
     {
         Main main;
-        SettingsManager settings;
-        TimeManager time;
+        SettingsManager settingsManager;
+        TimeManager timeManager;
+        CityPlanner cityPlanner;
+        IVisualizer visualizer;
 
         Random random;
         ShapeFactory shapeFact;
         StructureFactory structFact;
-        IVisualizer visualizer;
 
         public PersistentObjectsFactory(Main main)
         {
             this.main = main;
             CreateSettingsManager();
             CreateTimeManager();
+            CreateCityPlanner();
+            CreateVisualizer();
         }
 
         public Random CreateRandom()
         {
             if (random == null)
             {
-                string seed = settings.GetSettingsValue("RandomObjectSeed");
+                string seed = settingsManager.GetSettingsValue("RandomObjectSeed");
 
                 int numb;
                 bool is32BitNumber = int.TryParse(seed, out numb);
@@ -48,7 +52,7 @@ namespace CityGrowthSim.Factories
 
         public IVisualizer CreateVisualizer()
         {
-            if (visualizer == null) visualizer = new StandardVisualizer(main); // Should select based on settings
+            if (visualizer == null) visualizer = new StandardVisualizer(main, CreateTimeManager(), CreateCityPlanner());
             return visualizer;
         }
 
@@ -66,23 +70,33 @@ namespace CityGrowthSim.Factories
 
         public SettingsManager CreateSettingsManager()
         {
-            if (settings == null) settings = new SettingsManager();
-            return settings;
+            if (settingsManager == null) settingsManager = new SettingsManager();
+            return settingsManager;
         }
 
         public TimeManager CreateTimeManager()
         {
-            string hzString = settings.GetSettingsValue("SimulationHz");
+            if (timeManager == null)
+            {
+                string hzString = settingsManager.GetSettingsValue("SimulationHz");
 
-            if (hzString == null) { return null; }
+                if (hzString == null) { return null; }
 
-            int hz;
-            bool isInt = int.TryParse(hzString, out hz);
+                int hz;
+                bool isInt = int.TryParse(hzString, out hz);
 
-            if (!isInt || hz <= 0) { Console.Error.WriteLine(string.Format("Not a valid simulationHz (should be an integer n > 0): {0}", hz)); return null; }
+                if (!isInt || hz <= 0) { Console.Error.WriteLine(string.Format("Not a valid simulationHz (should be an integer n > 0): {0}", hz)); return null; }
+                
+                timeManager = new TimeManager(hz);
+            }
 
-            if (time == null) time = new TimeManager(hz);
-            return time;
+            return timeManager;
+        }
+
+        public CityPlanner CreateCityPlanner()
+        {
+            if (cityPlanner == null) cityPlanner = new CityPlanner(CreateTimeManager(), CreateStructureFactory());
+            return cityPlanner;
         }
     }
 }
