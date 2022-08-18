@@ -91,7 +91,7 @@ namespace CityGrowthSim.Factories
                 if (hzString == null) { return null; }
 
                 int hz;
-                bool isInt = int.TryParse(hzString, out hz);
+                bool isInt = int.TryParse(hzString, out hz); // TODO: Update to use new GetSettingsValueAsInt
 
                 if (!isInt || hz <= 0) { Console.Error.WriteLine(string.Format("Not a valid simulationHz (should be an integer n > 0): {0}", hz)); return null; }
 
