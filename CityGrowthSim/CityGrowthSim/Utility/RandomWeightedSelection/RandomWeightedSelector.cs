@@ -16,7 +16,7 @@ namespace CityGrowthSim.Utility.RandomWeightedSelection
         /// <param name="options">Array containing all options</param>
         /// <param name="random">Random object to use for selecting option</param>
         /// <returns>Chosen options' object. Default value if no options</returns>
-        public static T SelectedRandomOption<T>(WeightedOption<T>[] options, Random random)
+        public static T SelectRandomOption<T>(WeightedOption<T>[] options, Random random)
         {
             if (options.Length == 0) return default(T);
 

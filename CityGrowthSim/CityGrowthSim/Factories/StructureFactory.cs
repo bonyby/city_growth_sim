@@ -22,7 +22,7 @@ namespace CityGrowthSim.Factories
         public IStructure CreateHouse()
         {
             House h = new House(new Point(random.Next(750), random.Next(500)), shapeFact.CreateShape("random"));
-            h.RotateCorners(63);
+            h.RotateCorners(random.Next(360));
             return h;
         }
     }

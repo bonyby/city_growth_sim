@@ -38,7 +38,10 @@ namespace CityGrowthSim
 
         private void button1_Click(object sender, EventArgs e)
         {
-            Structures.Add(structFact.CreateHouse());
+            for (int i = 0; i < 5; i++)
+            {
+                Structures.Add(structFact.CreateHouse());
+            }
             vis.DrawWorld();
         }
     }
