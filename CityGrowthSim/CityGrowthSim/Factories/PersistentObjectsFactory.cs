@@ -55,8 +55,9 @@ namespace CityGrowthSim.Factories
             if (visualizer == null)
             {
                 // TODO: Strategies, colors etc. should be selected through preferences/settings at some point
-                ITerrainVisualizationStrategy terrainStrat = new SolidColorTerrainVisualizationStrategy(Color.LawnGreen);
-                IStructuresVisualizationStrategy structuresStrat = new SolidColorStructuresVisualizationStrategy(Color.Black, CreateCityPlanner());
+                ITerrainVisualizationStrategy terrainStrat = new SolidColorTerrainVisualizationStrategy(ColorTranslator.FromHtml("#B1C38F"));
+                //IStructuresVisualizationStrategy structuresStrat = new SolidColorStructuresVisualizationStrategy(ColorTranslator.FromHtml("#715240"), CreateCityPlanner());
+                IStructuresVisualizationStrategy structuresStrat = new BorderedStructuresVisualizationStrategy(ColorTranslator.FromHtml("#715240"), ColorTranslator.FromHtml("#272727"), 1.5f, CreateCityPlanner());
 
                 visualizer = new StandardVisualizer(main, CreateTimeManager(), terrainStrat, structuresStrat);
             }
