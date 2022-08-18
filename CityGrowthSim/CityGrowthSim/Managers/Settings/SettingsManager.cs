@@ -57,5 +57,19 @@ namespace CityGrowthSim.Managers.Settings
 
             return value;
         }
+
+        /// <summary>
+        /// Finds the int value for the given string key
+        /// </summary>
+        /// <param name="key">Key for the key-value pair</param>
+        /// <returns>int value.</returns>
+        public int GetSettingsValueAsInt(string key)
+        {
+            // TODO: Should throw an error if value is not an int
+            string stringVal = GetSettingsValue(key);
+            int value;
+            int.TryParse(stringVal, out value);
+            return value;
+        }
     }
 }

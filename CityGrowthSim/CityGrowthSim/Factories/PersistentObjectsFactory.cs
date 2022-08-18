@@ -2,8 +2,10 @@
 using CityGrowthSim.Managers;
 using CityGrowthSim.Managers.Settings;
 using CityGrowthSim.Visualization;
+using CityGrowthSim.Visualization.TerrainStrategies;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -52,7 +54,14 @@ namespace CityGrowthSim.Factories
 
         public IVisualizer CreateVisualizer()
         {
-            if (visualizer == null) visualizer = new StandardVisualizer(main, CreateTimeManager(), CreateCityPlanner());
+
+            if (visualizer == null)
+            {
+                // TODO: Strategies, colors etc. should be selected through preferences/settings at some point
+                ITerrainVisualizationStrategy terrainStrat = new SolidColorTerrainVisualizationStrategy(Color.LawnGreen);
+
+                visualizer = new StandardVisualizer(main, CreateTimeManager(), CreateCityPlanner(), terrainStrat);
+            }
             return visualizer;
         }
 
@@ -86,7 +95,7 @@ namespace CityGrowthSim.Factories
                 bool isInt = int.TryParse(hzString, out hz);
 
                 if (!isInt || hz <= 0) { Console.Error.WriteLine(string.Format("Not a valid simulationHz (should be an integer n > 0): {0}", hz)); return null; }
-                
+
                 timeManager = new TimeManager(hz);
             }
 

@@ -1,6 +1,7 @@
 ﻿using CityGrowthSim.City;
 using CityGrowthSim.City.Structures;
 using CityGrowthSim.Managers;
+using CityGrowthSim.Visualization.TerrainStrategies;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -15,12 +16,15 @@ namespace CityGrowthSim.Visualization
         Main main;
         private TimeManager timeManager;
         private CityPlanner cityPlanner;
+        private ITerrainVisualizationStrategy terrainStrat;
 
-        public StandardVisualizer(Main main, TimeManager timeManager, CityPlanner cityPlanner)
+        public StandardVisualizer(Main main, TimeManager timeManager, CityPlanner cityPlanner, ITerrainVisualizationStrategy terrainStrat)
         {
             this.main = main;
             this.timeManager = timeManager;
             this.cityPlanner = cityPlanner;
+
+            this.terrainStrat = terrainStrat;
 
             timeManager.UpdateReached += TimeManager_UpdateReached;
         }
@@ -32,8 +36,15 @@ namespace CityGrowthSim.Visualization
 
         public void DrawWorld()
         {
+            Graphics graphics = main.Graphics;
+            Size formSize = main.Size;
+            Bitmap bitmap = new Bitmap(formSize.Width, formSize.Height);
+            Graphics g = Graphics.FromImage(bitmap);
+            g.Clear(Color.White);
+
+            terrainStrat.DrawTerrain(g);
+
             Brush b = new SolidBrush(Color.Black);
-            Graphics g = main.Graphics;
             g.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.HighQuality;
             List<IStructure> structures = cityPlanner.GetAllStructures();
 
@@ -42,7 +53,10 @@ namespace CityGrowthSim.Visualization
                 g.FillPolygon(b, s.GlobalCorners);
             }
 
+            graphics.DrawImage(bitmap, 0, 0);
+
             g.Dispose();
+            graphics.Dispose();
             b.Dispose();
         }
     }
