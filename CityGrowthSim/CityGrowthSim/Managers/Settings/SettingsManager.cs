@@ -65,11 +65,18 @@ namespace CityGrowthSim.Managers.Settings
         /// <returns>int value.</returns>
         public int GetSettingsValueAsInt(string key)
         {
-            // TODO: Should throw an error if value is not an int
             string stringVal = GetSettingsValue(key);
             int value;
-            int.TryParse(stringVal, out value);
+            bool success = int.TryParse(stringVal, out value);
+
+            if (!success) throw new SettingsValueNotIntException(String.Format("{0} settings value not an integer: {1}", key, stringVal));
+
             return value;
         }
+    }
+
+    public class SettingsValueNotIntException : Exception
+    {
+        public SettingsValueNotIntException(string message) : base(message) { }
     }
 }

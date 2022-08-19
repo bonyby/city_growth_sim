@@ -86,14 +86,18 @@ namespace CityGrowthSim.Factories
         {
             if (timeManager == null)
             {
-                string hzString = settingsManager.GetSettingsValue("SimulationHz");
-
-                if (hzString == null) { return null; }
-
                 int hz;
-                bool isInt = int.TryParse(hzString, out hz); // TODO: Update to use new GetSettingsValueAsInt
+                try
+                {
+                    hz = settingsManager.GetSettingsValueAsInt("SimulationHz");
+                }
+                catch (SettingsValueNotIntException e)
+                {
+                    Console.Error.WriteLine(e.Message);
+                    return null;
+                }
 
-                if (!isInt || hz <= 0) { Console.Error.WriteLine(string.Format("Not a valid simulationHz (should be an integer n > 0): {0}", hz)); return null; }
+                if (hz <= 0) { Console.Error.WriteLine(string.Format("Not a valid simulationHz (should be an integer n > 0): {0}", hz)); return null; }
 
                 timeManager = new TimeManager(hz);
             }
