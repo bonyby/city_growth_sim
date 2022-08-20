@@ -9,39 +9,70 @@ namespace CityGrowthSim.Utility
 {
     static internal class PointUtility
     {
-        public static Point[] RotatePointsAroundCentroid(Point[] points, double degrees)
+        public static PointF[] RotatePointsAroundCentroidPrecise(PointF[] points, double degrees)
         {
-            if (points == null || points.Length == 0) { return new Point[0]; }
+            if (points == null || points.Length == 0) { return new PointF[0]; }
 
             // Calculate centroid
-            Point c = new Point(0, 0);
-            foreach (Point p in points)
+            PointF c = new PointF(0, 0);
+            foreach (PointF p in points)
             {
                 c.X += p.X;
                 c.Y += p.Y;
             }
 
-            c.X = (int)Math.Floor((double)c.X / points.Length);
-            c.Y = (int)Math.Floor((double)c.Y / points.Length);
+            c.X = c.X / points.Length;
+            c.Y = c.Y / points.Length;
 
             // 'Move' centroid to origo relative to each point and rotate
-            Point[] newPs = new Point[points.Length];
+            PointF[] newPs = new PointF[points.Length];
             double rad = degrees * (Math.PI / 180); // convert degrees to radians
             for (int i = 0; i < newPs.Length; i++)
             {
-                Point p = points[i];
-                Point newP = new Point(p.X - c.X, p.Y - c.Y);
+                PointF p = points[i];
+                PointF newP = new PointF(p.X - c.X, p.Y - c.Y);
 
                 // Rotate based on rotation matrix R = [cosθ sinθ, -sinθ cosθ]
                 // and move back to original centroid
-                double cos = Math.Cos(rad);
-                double sin = Math.Sin(rad);
-                int newX = (int)(Math.Floor(newP.X * cos + newP.Y * sin + c.X));
-                int newY = (int)(Math.Floor(-newP.X * sin + newP.Y * cos + c.Y));
+                float cos = (float)Math.Cos(rad);
+                float sin = (float)Math.Sin(rad);
+                float newX = newP.X * cos + newP.Y * sin + c.X;
+                float newY = -newP.X * sin + newP.Y * cos + c.Y;
                 newP.X = newX;
                 newP.Y = newY;
 
                 newPs[i] = newP;
+            }
+
+            return newPs;
+        }
+
+        public static Point[] RotatePointsAroundCentroid(Point[] points, double degrees)
+        {
+            PointF[] ps = ConvertPointToPointF(points);
+
+            ps = RotatePointsAroundCentroidPrecise(ps, degrees);
+
+            return ConvertPointFToPoint(ps);
+        }
+
+        public static PointF[] ConvertPointToPointF(Point[] points)
+        {
+            PointF[] newPs = new PointF[points.Length];
+            for (int i = 0; i < newPs.Length; i++)
+            {
+                newPs[i] = new Point(points[i].X, points[i].Y);
+            }
+
+            return newPs;
+        }
+
+        public static Point[] ConvertPointFToPoint(PointF[] points)
+        {
+            Point[] newPs = new Point[points.Length];
+            for (int i = 0; i < newPs.Length; i++)
+            {
+                newPs[i] = new Point((int)Math.Floor(points[i].X), (int)Math.Floor(points[i].Y));
             }
 
             return newPs;
@@ -59,6 +90,7 @@ namespace CityGrowthSim.Utility
             // Takes inspiration from: https://github.com/cansik/LongLiveTheSquare
 
             Point[] convexHull = GetConvexHull(points);
+            PointF[] convexHullF = ConvertPointToPointF(convexHull);
 
             // Find minimum bounding box from convex hull
             Segment[] segments = ConvertConvexHullToLineSegments(convexHull);
@@ -66,28 +98,28 @@ namespace CityGrowthSim.Utility
             // For each segment s, rotate figure s.t. s is parallel with x-axis and find minX, maxX, minY, maxY
             // and create axis-aligned bounding box. Save if best area seen so far
             double bestArea = double.MaxValue;
-            Point[] minBBox = null;
+            PointF[] minBBox = null;
             foreach (Segment s in segments)
             {
                 Point sVector = new Point(s.E2.X - s.E1.X, s.E2.Y - s.E1.Y);
                 double polarAngle = Math.Atan2(sVector.Y, sVector.X) / (Math.PI / 180); // in degrees
 
-                Point[] candidate = RotatePointsAroundCentroid(convexHull, polarAngle);
-                (Point[] cand, double area) = GetCandidateBBoxAndArea(candidate);
+                PointF[] candidate = RotatePointsAroundCentroidPrecise(convexHullF, polarAngle);
+                (PointF[] cand, double area) = GetCandidateBBoxAndArea(candidate);
 
                 if (area < bestArea)
                 {
-                    minBBox = RotatePointsAroundCentroid(cand, -polarAngle);
+                    minBBox = RotatePointsAroundCentroidPrecise(cand, -polarAngle);
                 }
             }
 
-            return minBBox;
+            return ConvertPointFToPoint(minBBox);
 
-            (Point[], double) GetCandidateBBoxAndArea(Point[] candidate)
+            (PointF[], double) GetCandidateBBoxAndArea(PointF[] candidate)
             {
-                int minX = candidate[0].X, maxX = candidate[0].X, minY = candidate[0].Y, maxY = candidate[0].Y;
+                float minX = candidate[0].X, maxX = candidate[0].X, minY = candidate[0].Y, maxY = candidate[0].Y;
 
-                foreach (Point p in candidate)
+                foreach (PointF p in candidate)
                 {
                     if (p.X < minX) minX = p.X;
                     if (p.X > maxX) maxX = p.X;
@@ -95,7 +127,7 @@ namespace CityGrowthSim.Utility
                     if (p.Y > maxY) maxY = p.Y;
                 }
 
-                Point[] MBBox = new Point[] { new Point(minX, minY), new Point(minX, maxY), new Point(maxX, maxY), new Point(maxX, minY) };
+                PointF[] MBBox = new PointF[] { new PointF(minX, minY), new PointF(minX, maxY), new PointF(maxX, maxY), new PointF(maxX, minY) };
                 double area = (maxX - minX) * (maxY - minY);
                 return (MBBox, area);
             }
