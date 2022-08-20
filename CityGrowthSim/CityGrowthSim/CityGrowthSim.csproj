@@ -69,6 +69,7 @@
     <Compile Include="City\Structures\Shapes\IShape.cs" />
     <Compile Include="City\Structures\Shapes\LShape.cs" />
     <Compile Include="City\Structures\Shapes\RectangleShape.cs" />
+    <Compile Include="Utility\MonotoneChain.cs" />
     <Compile Include="Utility\PointUtility.cs" />
     <Compile Include="Utility\RandomWeightedSelection\RandomWeightedSelector.cs" />
     <Compile Include="Visualization\StandardVisualizer.cs" />

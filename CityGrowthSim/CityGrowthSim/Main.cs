@@ -1,6 +1,8 @@
 ﻿using CityGrowthSim.City.Structures;
+using CityGrowthSim.City.Structures.Shapes;
 using CityGrowthSim.Factories;
 using CityGrowthSim.Managers.Settings;
+using CityGrowthSim.Utility;
 using CityGrowthSim.Utility.RandomWeightedSelection;
 using CityGrowthSim.Visualization;
 using System;
@@ -30,6 +32,21 @@ namespace CityGrowthSim
 
             int width = settingsMan.GetSettingsValueAsInt("DefaultWindowWidth");
             int height = settingsMan.GetSettingsValueAsInt("DefaultWindowHeight");
+
+            StructureFactory structFact = persistentFact.CreateStructureFactory();
+            IStructure structure = structFact.CreateHouse();
+
+            Console.WriteLine("Structure:");
+            foreach (Point p in structure.GlobalCorners)
+            {
+                Console.WriteLine(p);
+            }
+
+            Console.WriteLine("Convex hull:");
+            foreach (Point p in PointUtility.GetConvexHull(structure.GlobalCorners))
+            {
+                Console.WriteLine(p);
+            }
 
             Size = new Size(width, height);
         }

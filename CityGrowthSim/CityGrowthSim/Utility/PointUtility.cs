@@ -46,5 +46,28 @@ namespace CityGrowthSim.Utility
 
             return newPs;
         }
+
+        /// <summary>
+        /// Calculates the minimum bounding box of the points.
+        /// This bounding box is not necessarily axis-aligned and is thus the true minimum bounding box (compared to the world bounding box, which is axis aligned and might not yield the smallest bounding box)
+        /// </summary>
+        /// <param name="points">Points to generate minimum bounding box of</param>
+        /// <returns>Points describing minimum bounding box</returns>
+        public static Point[] GetMinimumBoundingBox(Point[] points)
+        {
+            // Takes inspiration from: https://github.com/cansik/LongLiveTheSquare
+
+            throw new NotImplementedException();
+        }
+
+        /// <summary>
+        /// Calculates the convex hull of the provided points.
+        /// </summary>
+        /// <param name="points">Points to generate convex hull of</param>
+        /// <returns>Points describing convex hull</returns>
+        public static Point[] GetConvexHull(Point[] points)
+        {
+            return MonotoneChain.GetConvexHull(points);
+        }
     }
 }
