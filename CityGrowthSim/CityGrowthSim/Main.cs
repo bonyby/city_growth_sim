@@ -42,8 +42,8 @@ namespace CityGrowthSim
                 Console.WriteLine(p);
             }
 
-            Console.WriteLine("Convex hull:");
-            foreach (Point p in PointUtility.GetConvexHull(structure.GlobalCorners))
+            Console.WriteLine("MBBox:");
+            foreach (Point p in PointUtility.GetMinimumBoundingBox(structure.GlobalCorners))
             {
                 Console.WriteLine(p);
             }
