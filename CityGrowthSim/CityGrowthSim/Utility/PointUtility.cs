@@ -118,6 +118,7 @@ namespace CityGrowthSim.Utility
         /// Calculates the minimum bounding box of the points.
         /// This bounding box is not necessarily axis-aligned and is thus the true minimum bounding box (compared to the world bounding box, which is axis aligned and might not yield the smallest bounding box)
         /// Assumes |points| >= 3. Undefined behaviour for |points| < 3.
+        /// DISCLAIMER & TODO: Seems to sometimes (rarely) give an incorrect MBBox.. Don't know why (maybe some rotation error of candidates). Not important right now as it's rare, but should be looked at at some point.
         /// </summary>
         /// <param name="points">Points to generate minimum bounding box of</param>
         /// <returns>Points describing minimum bounding box</returns>

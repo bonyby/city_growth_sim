@@ -40,13 +40,8 @@ namespace CityGrowthSim.City.Structures
         Point Position { get; }
 
         /// <summary>
-        /// The width of the bounding box containing the structure/corners
+        /// The minimum bounding box of the structure
         /// </summary>
-        int BoundingWidth { get; }
-
-        /// <summary>
-        /// The height of the bounding box containing the structure/corners
-        /// </summary>
-        int BoundingHeight { get; }
+        Point[] MinimumBoundingBox { get; }
     }
 }
