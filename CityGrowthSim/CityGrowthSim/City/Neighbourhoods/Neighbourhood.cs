@@ -12,18 +12,20 @@ namespace CityGrowthSim.City.Neighbourhoods
     // Needed for proper code structure.
     internal class Neighbourhood
     {
-        List<IStructure> structures;
-
         public Neighbourhood()
         {
             Structures = new List<IStructure>();
+            NewNeighbourCandidates = new List<IStructure>();
         }
 
-        public List<IStructure> Structures { get => structures; set => structures = value; }
+        public List<IStructure> Structures { get; }
+
+        public List<IStructure> NewNeighbourCandidates { get; }
 
         public void AddStructure(IStructure structure)
         {
-            structures.Add(structure);
+            Structures.Add(structure);
+            NewNeighbourCandidates.Add(structure);
         }
     }
 }

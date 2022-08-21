@@ -19,10 +19,10 @@ namespace CityGrowthSim.Factories
             this.shapeFact = shapeFact;
         }
 
-        public IStructure CreateHouse()
+        public IStructure CreateHouse(Point position)
         {
-            House h = new House(new Point(random.Next(750), random.Next(500)), shapeFact.CreateShape("random"));
-            h.RotateCorners(random.Next(360));
+            //House h = new House(new Point(random.Next(750), random.Next(500)), shapeFact.CreateShape("random"));
+            House h = new House(position, shapeFact.CreateShape("random"));
             return h;
         }
     }

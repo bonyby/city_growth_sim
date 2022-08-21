@@ -4,6 +4,7 @@ using CityGrowthSim.Factories;
 using CityGrowthSim.Managers;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,7 +52,24 @@ namespace CityGrowthSim.City
         private void AddNewStructure()
         {
             Neighbourhood n = neighbourhoods[0];
-            n.AddStructure(structureFact.CreateHouse());
+            List<IStructure> neighbourCandidates = n.NewNeighbourCandidates;
+
+            // TODO: Look through neighbour candidates untill an available space has been found.
+            // just placing besides some candidate now without collision detection to prototype.
+
+            Random random = new Random(); // DISCLAIMER: temporary Random obj. Will be removed soon or replaced with perm. Random obj.
+            if (neighbourCandidates.Count == 0)
+            {
+                IStructure h = structureFact.CreateHouse(new Point(random.Next(750), random.Next(500)));
+                h.RotateCornersAroundCentroid(random.Next(360));
+                n.AddStructure(h);
+                return;
+            }
+
+            int numb = random.Next(neighbourCandidates.Count);
+            IStructure cand = neighbourCandidates[numb];
+            Point[] candMBBox = cand.MinimumBoundingBox;
+
         }
 
         private void CreateNewNeighbourhood()

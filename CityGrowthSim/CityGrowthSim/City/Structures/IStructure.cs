@@ -32,10 +32,19 @@ namespace CityGrowthSim.City.Structures
         /// </summary>
         /// <param name="degrees">Desired rotation in degrees</param>
         /// <returns>Point[] array containing updated global corner positions</returns>
-        Point[] RotateCorners(int degrees);
+        Point[] RotateCornersAroundCentroid(int degrees);
 
         /// <summary>
-        /// Position of the top left corner of the bounding box
+        /// Rotates and updates the corners of the structure based on the supplied degrees around the given point.
+        /// A positive value rotates clockwise, a negative value rotates counterclockwise.
+        /// </summary>
+        /// <param name="degrees">Desired rotation in degrees</param>
+        /// <param name="point">Point to rotate about</param>
+        /// <returns>Rotated points</returns>
+        Point[] RotateCornersAroundPoint(int degrees, Point point);
+
+        /// <summary>
+        /// Original position of the top left corner of the bounding box
         /// </summary>
         Point Position { get; }
 

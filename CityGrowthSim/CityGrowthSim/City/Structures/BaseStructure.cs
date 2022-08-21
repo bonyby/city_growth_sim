@@ -79,10 +79,19 @@ namespace CityGrowthSim.City.Structures
             }
         }
 
-        public Point[] RotateCorners(int degrees)
+        public Point[] RotateCornersAroundCentroid(int degrees)
         {
             minBoundBoxDirty = true;
-            Corners = PointUtility.RotatePointsAroundCentroid(Corners, degrees); // Points might have negative coordinates, so 
+            Corners = PointUtility.RotatePointsAroundCentroid(Corners, degrees);
+            return GlobalCorners;
+        }
+
+        public Point[] RotateCornersAroundPoint(int degrees, Point point)
+        {
+            minBoundBoxDirty = true;
+            PointF rp = new PointF(point.X, point.Y);
+            PointF[] CornersF = PointUtility.RotatePointsAroundPointPrecise(PointUtility.ConvertPointToPointF(Corners), degrees, rp);
+            Corners = PointUtility.ConvertPointFToPoint(CornersF);
             return GlobalCorners;
         }
     }
