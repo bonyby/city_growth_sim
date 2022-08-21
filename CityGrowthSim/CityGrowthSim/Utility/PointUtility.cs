@@ -9,11 +9,18 @@ namespace CityGrowthSim.Utility
 {
     static internal class PointUtility
     {
+        /// <summary>
+        /// Rotates the given points around the given point by the given degrees.
+        /// </summary>
+        /// <param name="points">Points to rotate</param>
+        /// <param name="degrees">Degrees to rotate</param>
+        /// <param name="rotatePoint">Point to rotate around</param>
+        /// <returns>Rotated points</returns>
         public static PointF[] RotatePointsAroundPointPrecise(PointF[] points, double degrees, PointF rotatePoint)
         {
             if (points == null || points.Length == 0) { return new PointF[0]; }
 
-            // 'Move' centroid to origo relative to each point and rotate
+            // 'Move' rotate point to origo relative to each point and rotate
             PointF[] newPs = new PointF[points.Length];
             double rad = degrees * (Math.PI / 180); // convert degrees to radians
             for (int i = 0; i < newPs.Length; i++)
@@ -22,7 +29,7 @@ namespace CityGrowthSim.Utility
                 PointF newP = new PointF(p.X - rotatePoint.X, p.Y - rotatePoint.Y);
 
                 // Rotate based on rotation matrix R = [cosθ sinθ, -sinθ cosθ]
-                // and move back to original centroid
+                // and move back to original rotate point
                 double cos = Math.Cos(rad);
                 double sin = Math.Sin(rad);
                 double newX = newP.X * cos + newP.Y * sin + rotatePoint.X;
@@ -39,29 +46,25 @@ namespace CityGrowthSim.Utility
             return newPs;
         }
 
+        /// <summary>
+        /// Rotates the given points around the centroid of them by the given degrees.
+        /// </summary>
+        /// <param name="points">Points to rotate</param>
+        /// <param name="degrees">Degrees to rotate</param>
+        /// <returns>Rotated points</returns>
         public static PointF[] RotatePointsAroundCentroidPrecise(PointF[] points, double degrees)
         {
             PointF c = CalculateCentroid(points);
 
             return RotatePointsAroundPointPrecise(points, degrees, c);
         }
-
-        private static PointF CalculateCentroid(PointF[] points)
-        {
-            PointF c = new PointF(0, 0);
-            foreach (PointF p in points)
-            {
-                c.X += p.X;
-                c.Y += p.Y;
-            }
-
-            c.X = c.X / points.Length;
-            c.Y = c.Y / points.Length;
-
-            //Console.WriteLine("Centroid: " + c);
-            return c;
-        }
-
+        
+        /// <summary>
+        /// Rotates the given points around the centroid of them by the given degrees.
+        /// </summary>
+        /// <param name="points">Points to rotate</param>
+        /// <param name="degrees">Degrees to rotate</param>
+        /// <returns>Rotated points</returns>
         public static Point[] RotatePointsAroundCentroid(Point[] points, double degrees)
         {
             PointF[] ps = ConvertPointToPointF(points);
@@ -71,6 +74,12 @@ namespace CityGrowthSim.Utility
             return ConvertPointFToPoint(ps);
         }
 
+        /// <summary>
+        /// Convert a Point[] to PointF[]
+        /// </summary>
+        /// <param name="points">Point[] to convert</param>
+        /// <returns>Converted PointF[]</returns>
+        
         public static PointF[] ConvertPointToPointF(Point[] points)
         {
             PointF[] newPs = new PointF[points.Length];
@@ -82,6 +91,11 @@ namespace CityGrowthSim.Utility
             return newPs;
         }
 
+        /// <summary>
+        /// Convert a PointF[] to Point[]
+        /// </summary>
+        /// <param name="points">PointF[] to convert</param>
+        /// <returns>Converted Point[]</returns>
         public static Point[] ConvertPointFToPoint(PointF[] points)
         {
             //Console.WriteLine("PointF:");
@@ -182,6 +196,21 @@ namespace CityGrowthSim.Utility
         public static Point[] GetConvexHull(Point[] points)
         {
             return MonotoneChain.GetConvexHull(points);
+        }
+        private static PointF CalculateCentroid(PointF[] points)
+        {
+            PointF c = new PointF(0, 0);
+            foreach (PointF p in points)
+            {
+                c.X += p.X;
+                c.Y += p.Y;
+            }
+
+            c.X = c.X / points.Length;
+            c.Y = c.Y / points.Length;
+
+            //Console.WriteLine("Centroid: " + c);
+            return c;
         }
     }
 
