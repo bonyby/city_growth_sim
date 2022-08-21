@@ -33,20 +33,20 @@ namespace CityGrowthSim
             int width = settingsMan.GetSettingsValueAsInt("DefaultWindowWidth");
             int height = settingsMan.GetSettingsValueAsInt("DefaultWindowHeight");
 
-            StructureFactory structFact = persistentFact.CreateStructureFactory();
-            IStructure structure = structFact.CreateHouse();
+            //StructureFactory structFact = persistentFact.CreateStructureFactory();
+            //IStructure structure = structFact.CreateHouse();
 
-            Console.WriteLine("Structure:");
-            foreach (Point p in structure.GlobalCorners)
-            {
-                Console.WriteLine(p);
-            }
+            //Console.WriteLine("Structure:");
+            //foreach (Point p in structure.GlobalCorners)
+            //{
+            //    Console.WriteLine(p);
+            //}
 
-            Console.WriteLine("MBBox:");
-            foreach (Point p in PointUtility.GetMinimumBoundingBox(structure.GlobalCorners))
-            {
-                Console.WriteLine(p);
-            }
+            //Console.WriteLine("MBBox:");
+            //foreach (Point p in PointUtility.GetMinimumBoundingBox(structure.GlobalCorners))
+            //{
+            //    Console.WriteLine(p);
+            //}
 
             Size = new Size(width, height);
         }

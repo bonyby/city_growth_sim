@@ -9,11 +9,45 @@ namespace CityGrowthSim.Utility
 {
     static internal class PointUtility
     {
-        public static PointF[] RotatePointsAroundCentroidPrecise(PointF[] points, double degrees)
+        public static PointF[] RotatePointsAroundPointPrecise(PointF[] points, double degrees, PointF rotatePoint)
         {
             if (points == null || points.Length == 0) { return new PointF[0]; }
 
-            // Calculate centroid
+            // 'Move' centroid to origo relative to each point and rotate
+            PointF[] newPs = new PointF[points.Length];
+            double rad = degrees * (Math.PI / 180); // convert degrees to radians
+            for (int i = 0; i < newPs.Length; i++)
+            {
+                PointF p = points[i];
+                PointF newP = new PointF(p.X - rotatePoint.X, p.Y - rotatePoint.Y);
+
+                // Rotate based on rotation matrix R = [cosθ sinθ, -sinθ cosθ]
+                // and move back to original centroid
+                double cos = Math.Cos(rad);
+                double sin = Math.Sin(rad);
+                double newX = newP.X * cos + newP.Y * sin + rotatePoint.X;
+                double newY = -newP.X * sin + newP.Y * cos + rotatePoint.Y;
+                newP.X = (float)newX;
+                newP.Y = (float)newY;
+
+                //Console.WriteLine("newX (double): " + newX + " newX (float): " + newP.X);
+                //Console.WriteLine("newY (double): " + newY + " newY (float): " + newP.Y);
+
+                newPs[i] = newP;
+            }
+
+            return newPs;
+        }
+
+        public static PointF[] RotatePointsAroundCentroidPrecise(PointF[] points, double degrees)
+        {
+            PointF c = CalculateCentroid(points);
+
+            return RotatePointsAroundPointPrecise(points, degrees, c);
+        }
+
+        private static PointF CalculateCentroid(PointF[] points)
+        {
             PointF c = new PointF(0, 0);
             foreach (PointF p in points)
             {
@@ -24,27 +58,8 @@ namespace CityGrowthSim.Utility
             c.X = c.X / points.Length;
             c.Y = c.Y / points.Length;
 
-            // 'Move' centroid to origo relative to each point and rotate
-            PointF[] newPs = new PointF[points.Length];
-            double rad = degrees * (Math.PI / 180); // convert degrees to radians
-            for (int i = 0; i < newPs.Length; i++)
-            {
-                PointF p = points[i];
-                PointF newP = new PointF(p.X - c.X, p.Y - c.Y);
-
-                // Rotate based on rotation matrix R = [cosθ sinθ, -sinθ cosθ]
-                // and move back to original centroid
-                float cos = (float)Math.Cos(rad);
-                float sin = (float)Math.Sin(rad);
-                float newX = newP.X * cos + newP.Y * sin + c.X;
-                float newY = -newP.X * sin + newP.Y * cos + c.Y;
-                newP.X = newX;
-                newP.Y = newY;
-
-                newPs[i] = newP;
-            }
-
-            return newPs;
+            //Console.WriteLine("Centroid: " + c);
+            return c;
         }
 
         public static Point[] RotatePointsAroundCentroid(Point[] points, double degrees)
@@ -69,10 +84,17 @@ namespace CityGrowthSim.Utility
 
         public static Point[] ConvertPointFToPoint(PointF[] points)
         {
+            //Console.WriteLine("PointF:");
+            //foreach (PointF pf in points)
+            //{
+            //    Console.WriteLine(pf);
+            //}
+            //Console.WriteLine("--");
+
             Point[] newPs = new Point[points.Length];
             for (int i = 0; i < newPs.Length; i++)
             {
-                newPs[i] = new Point((int)Math.Floor(points[i].X), (int)Math.Floor(points[i].Y));
+                newPs[i] = new Point((int)Math.Round(points[i].X), (int)Math.Round(points[i].Y));
             }
 
             return newPs;
@@ -91,6 +113,7 @@ namespace CityGrowthSim.Utility
 
             Point[] convexHull = GetConvexHull(points);
             PointF[] convexHullF = ConvertPointToPointF(convexHull);
+            PointF centroid = CalculateCentroid(convexHullF);
 
             // Find minimum bounding box from convex hull
             Segment[] segments = ConvertConvexHullToLineSegments(convexHull);
@@ -104,12 +127,14 @@ namespace CityGrowthSim.Utility
                 Point sVector = new Point(s.E2.X - s.E1.X, s.E2.Y - s.E1.Y);
                 double polarAngle = Math.Atan2(sVector.Y, sVector.X) / (Math.PI / 180); // in degrees
 
-                PointF[] candidate = RotatePointsAroundCentroidPrecise(convexHullF, polarAngle);
+                //Console.WriteLine("New candidate");
+                PointF[] candidate = RotatePointsAroundPointPrecise(convexHullF, polarAngle, centroid);
                 (PointF[] cand, double area) = GetCandidateBBoxAndArea(candidate);
 
                 if (area < bestArea)
                 {
-                    minBBox = RotatePointsAroundCentroidPrecise(cand, -polarAngle);
+                    //Console.WriteLine("Found new best");
+                    minBBox = RotatePointsAroundPointPrecise(cand, -polarAngle, centroid);
                 }
             }
 
