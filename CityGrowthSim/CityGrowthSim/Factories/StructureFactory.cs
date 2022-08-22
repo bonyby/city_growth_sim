@@ -21,6 +21,7 @@ namespace CityGrowthSim.Factories
 
         public IStructure CreateHouse(Point position)
         {
+            //Console.WriteLine("Position: " + position);
             //House h = new House(new Point(random.Next(750), random.Next(500)), shapeFact.CreateShape("random"));
             House h = new House(position, shapeFact.CreateShape("random"));
             return h;

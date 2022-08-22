@@ -66,10 +66,25 @@ namespace CityGrowthSim.City
                 return;
             }
 
+            // I'm so sorry for anyone having to look at this prototype spaghet.. *cough* code
             int numb = random.Next(neighbourCandidates.Count);
             IStructure cand = neighbourCandidates[numb];
             Point[] candMBBox = cand.MinimumBoundingBox;
-
+            int i = random.Next(candMBBox.Length);
+            Point p_i = candMBBox[i];
+            //Console.WriteLine("p_i: " + p_i);
+            int j = (candMBBox.Length + i + (random.Next(2) * 2 - 1)) % candMBBox.Length;
+            Point p_j = candMBBox[j];
+            PointF vec_ij = new PointF((p_j.X - p_i.X), (p_j.Y - p_i.Y));
+            double vec_ijLen = Math.Sqrt(Math.Pow(vec_ij.X, 2) + Math.Pow(vec_ij.Y, 2));
+            Console.WriteLine("p_j len: " + vec_ijLen);
+            PointF vec_ij_norm = new PointF((float)(vec_ij.X / vec_ijLen), (float)(vec_ij.Y / vec_ijLen));
+            Console.WriteLine("p_j: " + p_j + " p_j.norm.x: " + (vec_ij.X / vec_ijLen) + " p_j.nrom.y: " + (vec_ij.Y / vec_ijLen));
+            Point pos = new Point(p_i.X - (int)Math.Round(vec_ij.X), p_i.Y - (int)Math.Round(vec_ij.Y));
+            IStructure house = structureFact.CreateHouse(pos);
+            house.RotateCornersAroundCentroid(cand.Rotation + random.Next(11) - 5);
+            n.AddStructure(house);
+            return;
         }
 
         private void CreateNewNeighbourhood()

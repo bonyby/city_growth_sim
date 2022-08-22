@@ -15,6 +15,7 @@ namespace CityGrowthSim.City.Structures
         Point[] corners;
         Point[] minBoundBox = null;
         bool minBoundBoxDirty = true;
+        int rotation = 0;
 
         public BaseStructure(Point position)
         {
@@ -65,6 +66,8 @@ namespace CityGrowthSim.City.Structures
 
         public Point Position => position;
 
+        public int Rotation => rotation;
+
         public Point[] MinimumBoundingBox
         {
             get
@@ -81,18 +84,23 @@ namespace CityGrowthSim.City.Structures
 
         public Point[] RotateCornersAroundCentroid(int degrees)
         {
-            minBoundBoxDirty = true;
+            RotateUpdate(degrees);
             Corners = PointUtility.RotatePointsAroundCentroid(Corners, degrees);
             return GlobalCorners;
         }
 
         public Point[] RotateCornersAroundPoint(int degrees, Point point)
         {
-            minBoundBoxDirty = true;
+            RotateUpdate(degrees);
             PointF rp = new PointF(point.X, point.Y);
             PointF[] CornersF = PointUtility.RotatePointsAroundPointPrecise(PointUtility.ConvertPointToPointF(Corners), degrees, rp);
             Corners = PointUtility.ConvertPointFToPoint(CornersF);
             return GlobalCorners;
+        }
+        private void RotateUpdate(int degrees)
+        {
+            minBoundBoxDirty = true;
+            rotation += degrees;
         }
     }
 }

@@ -28,7 +28,7 @@ namespace CityGrowthSim.Visualization.StructuresStrategies
         public void DrawStructures(Graphics graphics)
         {
             Brush mainBrush = new SolidBrush(MainColor);
-            //Brush secBrush = new SolidBrush(Color.FromArgb(80, 0, 0, 255));
+            //Brush mBBoxBrush = new SolidBrush(Color.FromArgb(80, 0, 0, 255));
             Pen borderPen = new Pen(BorderColor, BorderWidth);
 
             List<IStructure> structures = cityPlanner.GetAllStructures();
@@ -36,7 +36,7 @@ namespace CityGrowthSim.Visualization.StructuresStrategies
             foreach (IStructure s in structures)
             {
                 graphics.FillPolygon(mainBrush, s.GlobalCorners);
-                //graphics.FillPolygon(secBrush, s.MinimumBoundingBox);
+                //graphics.FillPolygon(mBBoxBrush, s.MinimumBoundingBox);
 
                 List<Point> points = s.GlobalCorners.ToList();
                 points.Add(s.GlobalCorners[0]); // Append the first point to draw the last remaining line segment

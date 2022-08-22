@@ -49,6 +49,11 @@ namespace CityGrowthSim.City.Structures
         Point Position { get; }
 
         /// <summary>
+        /// The rotation of the structure
+        /// </summary>
+        int Rotation { get; }
+
+        /// <summary>
         /// The minimum bounding box of the structure
         /// </summary>
         Point[] MinimumBoundingBox { get; }
