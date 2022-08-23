@@ -67,11 +67,11 @@ namespace CityGrowthSim.Utility
         /// <returns>Rotated points</returns>
         public static Point[] RotatePointsAroundCentroid(Point[] points, double degrees)
         {
-            PointF[] ps = ConvertPointToPointF(points);
+            PointF[] ps = ConvertPointsToPointFs(points);
 
             ps = RotatePointsAroundCentroidPrecise(ps, degrees);
 
-            return ConvertPointFToPoint(ps);
+            return ConvertPointFsToPoints(ps);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace CityGrowthSim.Utility
         /// <param name="points">Point[] to convert</param>
         /// <returns>Converted PointF[]</returns>
         
-        public static PointF[] ConvertPointToPointF(Point[] points)
+        public static PointF[] ConvertPointsToPointFs(Point[] points)
         {
             PointF[] newPs = new PointF[points.Length];
             for (int i = 0; i < newPs.Length; i++)
@@ -96,7 +96,7 @@ namespace CityGrowthSim.Utility
         /// </summary>
         /// <param name="points">PointF[] to convert</param>
         /// <returns>Converted Point[]</returns>
-        public static Point[] ConvertPointFToPoint(PointF[] points)
+        public static Point[] ConvertPointFsToPoints(PointF[] points)
         {
             //Console.WriteLine("PointF:");
             //foreach (PointF pf in points)
@@ -127,7 +127,7 @@ namespace CityGrowthSim.Utility
             // Takes inspiration from: https://github.com/cansik/LongLiveTheSquare
 
             Point[] convexHull = GetConvexHull(points);
-            PointF[] convexHullF = ConvertPointToPointF(convexHull);
+            PointF[] convexHullF = ConvertPointsToPointFs(convexHull);
             PointF centroid = CalculateCentroid(convexHullF);
 
             // Find minimum bounding box from convex hull
@@ -153,7 +153,7 @@ namespace CityGrowthSim.Utility
                 }
             }
 
-            return ConvertPointFToPoint(minBBox);
+            return ConvertPointFsToPoints(minBBox);
 
             (PointF[], double) GetCandidateBBoxAndArea(PointF[] candidate)
             {
@@ -178,7 +178,7 @@ namespace CityGrowthSim.Utility
         /// </summary>
         /// <param name="point">PointF to normalize</param>
         /// <returns>The normalized PointF</returns>
-        public static PointF NormalizePointF(PointF point)
+        public static PointF Normalize(PointF point)
         {
             double len = Math.Sqrt(point.X * point.X + point.Y * point.Y);
             return new PointF((float)(point.X / len), (float)(point.Y / len));
@@ -246,7 +246,29 @@ namespace CityGrowthSim.Utility
             //Console.WriteLine("Centroid: " + c);
             return c;
         }
-        
+
+        /// <summary>
+        /// Calculates whether or not the two polygons described by the Point's intersect each other.
+        /// </summary>
+        /// <param name="poly1">First polygon</param>
+        /// <param name="poly2">Second polygon</param>
+        /// <returns>true if the polygons intersect, false if not</returns>
+        public static bool CheckPolygonsIntersecting(Point[] poly1, Point[] poly2)
+        {
+            return CheckPolygonsIntersecting(ConvertPointsToPointFs(poly1), ConvertPointsToPointFs(poly2));
+        }
+
+        /// <summary>
+        /// Calculates whether or not the two polygons described by the PointF's intersect each other.
+        /// </summary>
+        /// <param name="poly1">First polygon</param>
+        /// <param name="poly2">Second polygon</param>
+        /// <returns>true if the polygons intersect, false if not</returns>
+        public static bool CheckPolygonsIntersecting(PointF[] poly1, PointF[] poly2)
+        {
+            return GJK.PolygonsIntersecting(poly1, poly2);
+        }
+
         /// <summary>
         /// Converts the convex hull from Point[] to Segment[]
         /// </summary>

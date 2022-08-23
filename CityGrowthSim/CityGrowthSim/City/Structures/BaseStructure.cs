@@ -93,8 +93,8 @@ namespace CityGrowthSim.City.Structures
         {
             RotateUpdate(degrees);
             PointF rp = new PointF(point.X, point.Y);
-            PointF[] CornersF = PointUtility.RotatePointsAroundPointPrecise(PointUtility.ConvertPointToPointF(Corners), degrees, rp);
-            Corners = PointUtility.ConvertPointFToPoint(CornersF);
+            PointF[] CornersF = PointUtility.RotatePointsAroundPointPrecise(PointUtility.ConvertPointsToPointFs(Corners), degrees, rp);
+            Corners = PointUtility.ConvertPointFsToPoints(CornersF);
             return GlobalCorners;
         }
         private void RotateUpdate(int degrees)

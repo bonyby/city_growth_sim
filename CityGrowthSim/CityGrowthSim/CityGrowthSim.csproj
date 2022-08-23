@@ -34,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -45,6 +46,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="City\CityPlanner.cs" />
@@ -69,6 +71,7 @@
     <Compile Include="City\Structures\Shapes\IShape.cs" />
     <Compile Include="City\Structures\Shapes\LShape.cs" />
     <Compile Include="City\Structures\Shapes\RectangleShape.cs" />
+    <Compile Include="Utility\GJK.cs" />
     <Compile Include="Utility\MonotoneChain.cs" />
     <Compile Include="Utility\PointUtility.cs" />
     <Compile Include="Utility\RandomWeightedSelection\RandomWeightedSelector.cs" />

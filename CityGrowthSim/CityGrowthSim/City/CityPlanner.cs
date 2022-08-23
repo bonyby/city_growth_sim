@@ -46,7 +46,7 @@ namespace CityGrowthSim.City
         private void TimeManager_UpdateReached(object sender, EventArgs e)
         {
             // Simple logic for now. Simply add a structure at each update to the single neighbourhood available.
-            AddNewStructure();
+            //AddNewStructure();
         }
 
         private void AddNewStructure()

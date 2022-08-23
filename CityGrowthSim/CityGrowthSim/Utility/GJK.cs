@@ -14,15 +14,86 @@ namespace CityGrowthSim.Utility
     /// </summary>
     internal static class GJK
     {
+        /// <summary>
+        /// Calculates whether or not two polygons are intersecting.
+        /// </summary>
+        /// <param name="poly1">First polygon</param>
+        /// <param name="poly2">Second polygon</param>
+        /// <returns>true if the polygons are intersecting, false if not</returns>
         public static bool PolygonsIntersecting(PointF[] poly1, PointF[] poly2)
         {
+            // -- Basic idea is to find simplexes with corner points on the Minkowski difference of poly1 and poly2.
+            // -- The polygons intersect if atleast one point in each are equal to eachother: p1=p2 => p1-p2=0.
+            // -- If a simplex is found which contains origo, then poly1 and poly2 are intersecting. If no such simplex exists, then no intersection is happening.
+
             PointF poly1Cent = PointUtility.CalculateCentroid(poly1);
             PointF poly2Cent = PointUtility.CalculateCentroid(poly2);
-            PointF initDir = PointUtility.NormalizePointF(PointUtility.Subtract(poly2Cent, poly1Cent)); // Initial direction to look for intersection
+            PointF dir = PointUtility.Normalize(PointUtility.Subtract(poly2Cent, poly1Cent)); // Initial direction to look for intersection
 
-            PointF[] simplex = new PointF[] { CalculateSupportPoint(poly1, poly2, initDir) }; // Simplex
+            List<PointF> simplex = new List<PointF>();
+            PointF support = CalculateSupportPoint(poly1, poly2, dir);
+            simplex.Add(support); // Initial corner of simplex
+            dir = PointUtility.Normalize(PointUtility.Negate(simplex[0])); // New direction towards origo
 
-            throw new NotImplementedException();
+            while (true)
+            {
+                PointF vecA = CalculateSupportPoint(poly1, poly2, dir);
+
+                if (PointUtility.Dot(vecA, dir) < 0) return false; // the new point (A) did not cross the origo if the dot-product is negative. Since this is the furthest point towards origo, no intersection finds place
+            
+                simplex.Add(vecA);
+
+                if (HandleSimplex(ref simplex, ref dir)) return true; // The simplex contains origo = intersection
+            }
+        }
+
+        /// <summary>
+        /// Handles the two different cases for the simplex (either a line or a triangle).
+        /// Updates the direction variable sent as a reference for the next iteration of the algorithm.
+        /// </summary>
+        /// <param name="simplex">The simplex to handle</param>
+        /// <param name="dir">The direction object to update based on the simplex</param>
+        /// <returns>true if the simplex contains origo, false if not</returns>
+        private static bool HandleSimplex(ref List<PointF> simplex, ref PointF dir)
+        {
+            if (simplex.Count == 2) return LineCase(simplex, ref dir);
+            else return TriangleCase(ref simplex, ref dir);
+
+            bool LineCase(List<PointF> s, ref PointF d)
+            {
+                PointF A = s[1], B = s[0];
+                PointF AO = PointUtility.Negate(A); // Vector from A to Origo
+                PointF AB = PointUtility.Subtract(B, A);
+                PointF ABcross = TripleCrossProduct(AB, AO, AB); // (AB X AO) X AB. Gives the new direction (the normal of AB towards Origo).
+                d = PointUtility.Normalize(ABcross);
+                
+                return false; // Origo can't be contained in a line
+            }
+
+            bool TriangleCase(ref List<PointF> s, ref PointF d)
+            {
+                PointF A = s[2], B = s[1], C = s[0];
+                PointF AB = PointUtility.Subtract(B, A);
+                PointF AC = PointUtility.Subtract(C, A);
+                PointF AO = PointUtility.Negate(A);
+                PointF ABcross = TripleCrossProduct(AC, AB, AB);
+                PointF ACcross = TripleCrossProduct(AB, AC, AC);
+
+                // Check region AB and AC. If either contains Origo, then the simplex does not.
+                // If neither contains origo, then that implies the origo lies within the simplex (meaning there's an intersection).
+                return CheckRegion(ref s, ref d, ABcross, AO) || CheckRegion(ref s, ref d, ACcross, AO);
+            }
+
+            bool CheckRegion(ref List<PointF> s, ref PointF d, PointF cross, PointF AO)
+            {
+                if (PointUtility.Dot(cross, AO) > 0)
+                {
+                    s.RemoveAt(0);
+                    d = cross;
+                    return false;
+                }
+                else return true;
+            }
         }
 
         /// <summary>
