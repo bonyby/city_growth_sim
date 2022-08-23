@@ -58,7 +58,7 @@ namespace CityGrowthSim.Utility
 
             return RotatePointsAroundPointPrecise(points, degrees, c);
         }
-        
+
         /// <summary>
         /// Rotates the given points around the centroid of them by the given degrees.
         /// </summary>
@@ -174,19 +174,46 @@ namespace CityGrowthSim.Utility
         }
 
         /// <summary>
-        /// Converts the convex hull from Point[] to Segment[]
+        /// Normalizes the PointF as if it was a vector describing the given point
         /// </summary>
-        /// <param name="convexHull">Convex hull to convert</param>
-        /// <returns>Segments of convex hull</returns>
-        private static Segment[] ConvertConvexHullToLineSegments(Point[] convexHull)
+        /// <param name="point">PointF to normalize</param>
+        /// <returns>The normalized PointF</returns>
+        public static PointF NormalizePointF(PointF point)
         {
-            Segment[] segments = new Segment[convexHull.Length];
-            for (int i = 1; i < segments.Length; i++)
-            {
-                segments[i - 1] = new Segment(convexHull[i - 1], convexHull[i]);
-            }
-            segments[segments.Length - 1] = new Segment(convexHull[convexHull.Length - 1], convexHull[0]); // Add segment to close the gap from last to first point in convex hull
-            return segments;
+            double len = Math.Sqrt(point.X * point.X + point.Y * point.Y);
+            return new PointF((float)(point.X / len), (float)(point.Y / len));
+        }
+
+        /// <summary>
+        /// Subtracts the second point from the first coordinate wise
+        /// </summary>
+        /// <param name="p1">Point to subtract from</param>
+        /// <param name="p2">Point to subtract</param>
+        /// <returns>PointF describing p1-p2</returns>
+        public static PointF Subtract(PointF p1, PointF p2)
+        {
+            return new PointF(p1.X - p2.X, p1.Y - p2.Y);
+        }
+
+        /// <summary>
+        /// Calculates the dot product between the points as if they were vectors.
+        /// </summary>
+        /// <param name="p1">First point</param>
+        /// <param name="p2">Second point</param>
+        /// <returns>Dot product between p1 and p2</returns>
+        public static double Dot(PointF p1, PointF p2)
+        {
+            return (p1.X * p2.X + p1.Y * p2.Y);
+        }
+
+        /// <summary>
+        /// Negates the coordinates of a point (essentially flips the direction of the corresponding vector)
+        /// </summary>
+        /// <param name="point">Point to negate</param>
+        /// <returns>Negated point</returns>
+        public static PointF Negate(PointF point)
+        {
+            return new PointF(-point.X, -point.Y);
         }
 
         /// <summary>
@@ -198,7 +225,13 @@ namespace CityGrowthSim.Utility
         {
             return MonotoneChain.GetConvexHull(points);
         }
-        private static PointF CalculateCentroid(PointF[] points)
+        
+        /// <summary>
+        /// Calculates the centroid of the shape described by the points
+        /// </summary>
+        /// <param name="points">Points describing shape</param>
+        /// <returns>Centroid of shape as PointF</returns>
+        public static PointF CalculateCentroid(PointF[] points)
         {
             PointF c = new PointF(0, 0);
             foreach (PointF p in points)
@@ -212,6 +245,22 @@ namespace CityGrowthSim.Utility
 
             //Console.WriteLine("Centroid: " + c);
             return c;
+        }
+        
+        /// <summary>
+        /// Converts the convex hull from Point[] to Segment[]
+        /// </summary>
+        /// <param name="convexHull">Convex hull to convert</param>
+        /// <returns>Segments of convex hull</returns>
+        private static Segment[] ConvertConvexHullToLineSegments(Point[] convexHull)
+        {
+            Segment[] segments = new Segment[convexHull.Length];
+            for (int i = 1; i < segments.Length; i++)
+            {
+                segments[i - 1] = new Segment(convexHull[i - 1], convexHull[i]);
+            }
+            segments[segments.Length - 1] = new Segment(convexHull[convexHull.Length - 1], convexHull[0]); // Add segment to close the gap from last to first point in convex hull
+            return segments;
         }
     }
 
