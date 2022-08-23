@@ -33,25 +33,10 @@ namespace CityGrowthSim
             int width = settingsMan.GetSettingsValueAsInt("DefaultWindowWidth");
             int height = settingsMan.GetSettingsValueAsInt("DefaultWindowHeight");
 
-            Point[] poly1 = new Point[] { new Point(2, 4), new Point(-3, 2), new Point(-1, -3), new Point(4, -3), new Point(4, 2) };
-            Point[] poly2 = new Point[] { new Point(6, 5), new Point(5, 2), new Point(6, -2), new Point(10, -2), new Point(10, 2), new Point(9, 5) };
+            Point[] poly1 = new Point[] { new Point(2, 4), new Point(-3, 2), new Point(-1, -3), new Point(4, -3), new Point(6, 2) };
+            Point[] poly2 = new Point[] { new Point(6, 5), new Point(2, 2), new Point(6, -2), new Point(10, -2), new Point(10, 2), new Point(9, 5) };
 
             Console.WriteLine("Intersecting?: " + PointUtility.CheckPolygonsIntersecting(poly1, poly2));
-
-            //StructureFactory structFact = persistentFact.CreateStructureFactory();
-            //IStructure structure = structFact.CreateHouse();
-
-            //Console.WriteLine("Structure:");
-            //foreach (Point p in structure.GlobalCorners)
-            //{
-            //    Console.WriteLine(p);
-            //}
-
-            //Console.WriteLine("MBBox:");
-            //foreach (Point p in PointUtility.GetMinimumBoundingBox(structure.GlobalCorners))
-            //{
-            //    Console.WriteLine(p);
-            //}
 
             Size = new Size(width, height);
         }
