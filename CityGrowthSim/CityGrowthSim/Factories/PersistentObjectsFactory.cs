@@ -107,7 +107,7 @@ namespace CityGrowthSim.Factories
 
         public CityPlanner CreateCityPlanner()
         {
-            if (cityPlanner == null) cityPlanner = new CityPlanner(CreateTimeManager(), CreateStructureFactory());
+            if (cityPlanner == null) cityPlanner = new CityPlanner(CreateTimeManager(), CreateStructureFactory(), CreateRandom());
             return cityPlanner;
         }
     }

@@ -79,16 +79,21 @@ namespace CityGrowthSim.Utility
         /// </summary>
         /// <param name="points">Point[] to convert</param>
         /// <returns>Converted PointF[]</returns>
-        
+
         public static PointF[] ConvertPointsToPointFs(Point[] points)
         {
             PointF[] newPs = new PointF[points.Length];
             for (int i = 0; i < newPs.Length; i++)
             {
-                newPs[i] = new Point(points[i].X, points[i].Y);
+                newPs[i] = ConvertPointToPointF(points[i]);
             }
 
             return newPs;
+        }
+
+        public static PointF ConvertPointToPointF(Point p)
+        {
+            return new PointF(p.X, p.Y);
         }
 
         /// <summary>
@@ -108,10 +113,15 @@ namespace CityGrowthSim.Utility
             Point[] newPs = new Point[points.Length];
             for (int i = 0; i < newPs.Length; i++)
             {
-                newPs[i] = new Point((int)Math.Round(points[i].X), (int)Math.Round(points[i].Y));
+                newPs[i] = ConvertPointFToPoint(points[i]);
             }
 
             return newPs;
+        }
+
+        public static Point ConvertPointFToPoint(PointF p)
+        {
+            return new Point((int)Math.Round(p.X), (int)Math.Round(p.Y));
         }
 
         /// <summary>
@@ -217,6 +227,28 @@ namespace CityGrowthSim.Utility
         }
 
         /// <summary>
+        /// Multiplies each of the coordinates of the PointF by the supplied factor
+        /// </summary>
+        /// <param name="point">Point to multiply</param>
+        /// <param name="a">Multiplication factor</param>
+        /// <returns>New PointF with factor a multiplied onto the coordinates of point</returns>
+        public static PointF Multiply(PointF point, float a)
+        {
+            return new PointF(point.X * a, point.Y * a);
+        }
+
+        /// <summary>
+        /// Returns a new normalized PointF describing the direction from A to B
+        /// </summary>
+        /// <param name="A">The 'from' PointF</param>
+        /// <param name="B">The 'to' PointF</param>
+        /// <returns>A normal vector (PointF) from A to B</returns>
+        public static PointF DirectionTo(PointF A, PointF B)
+        {
+            return Normalize(new PointF(B.X - A.X, B.Y - A.Y));
+        }
+
+        /// <summary>
         /// Calculates the convex hull of the provided points.
         /// </summary>
         /// <param name="points">Points to generate convex hull of</param>
@@ -225,7 +257,7 @@ namespace CityGrowthSim.Utility
         {
             return MonotoneChain.GetConvexHull(points);
         }
-        
+
         /// <summary>
         /// Calculates the centroid of the shape described by the points
         /// </summary>

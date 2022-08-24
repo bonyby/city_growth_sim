@@ -27,5 +27,16 @@ namespace CityGrowthSim.City.Neighbourhoods
             Structures.Add(structure);
             NewNeighbourCandidates.Add(structure);
         }
+
+        /// <summary>
+        /// Remove the structure with the specified index as a candidate to have neighbours
+        /// </summary>
+        /// <param name="i"></param>
+        public void RemoveNeighbourCandidate(int i)
+        {
+            if (i < 0 || i >= Structures.Count) return;
+
+            NewNeighbourCandidates.RemoveAt(i);
+        }
     }
 }
