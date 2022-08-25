@@ -103,14 +103,17 @@ namespace CityGrowthSim.City
                 {
                     Point p_i = mBBox[i];
                     Point p_j = mBBox[(i + 1) % mBBox.Length]; // next corner
-                    Point p_k = mBBox[(mBBox.Length + i - 1) % mBBox.Length]; // prev corner (needs to add the length of the array in case i=0 which results in -1 otherwise)
+                    Point p_k = mBBox[(mBBox.Length + i - 1) % mBBox.Length]; // previous corner (needs to add the length of the array in case i=0 which results in -1 otherwise)
                     PointF dir_ji = PointUtility.DirectionTo(p_j, p_i);
                     PointF dir_ki = PointUtility.DirectionTo(p_k, p_i);
                     PointF offsetDir_ji = PointUtility.Multiply(dir_ji, 50); // Magic constants for now. Will change later
                     PointF offsetDir_ki = PointUtility.Multiply(dir_ki, 50);
                     float offset = 1;
                     PointF p_0 = new PointF(p_i.X + dir_ji.X * offset, p_i.Y); // Anchor/first point of the potential plot
-                    PointF[] collBox = new PointF[] { p_0, new PointF(p_0.X + offsetDir_ji.X, p_0.Y), new PointF(p_0.X + offsetDir_ji.X, p_0.Y - offsetDir_ki.Y), new PointF(p_0.X, p_0.Y - offsetDir_ki.Y) };
+                    Point[] potentialPlot = PointUtility.ConvertPointFsToPoints(new PointF[] { p_0,
+                                                                                               new PointF(p_0.X + offsetDir_ji.X, p_0.Y),
+                                                                                               new PointF(p_0.X + offsetDir_ji.X, p_0.Y - offsetDir_ki.Y),
+                                                                                               new PointF(p_0.X, p_0.Y - offsetDir_ki.Y) });
 
                     // Check for an intersection with each structure in the neighbourhood except for the candidate itself
                     bool intersection = false;
@@ -118,7 +121,7 @@ namespace CityGrowthSim.City
                     candList.Add(cand);
                     foreach (IStructure structure in n.Structures.Except(candList))
                     {
-                        bool inter = PointUtility.CheckPolygonsIntersecting(PointUtility.ConvertPointFsToPoints(collBox), structure.MinimumBoundingBox);
+                        bool inter = PointUtility.CheckPolygonsIntersecting(potentialPlot, structure.MinimumBoundingBox);
                         if (inter) { intersection = true; break; }
                     }
 
@@ -126,9 +129,9 @@ namespace CityGrowthSim.City
                     if (!intersection)
                     {
                         Point intp_0 = PointUtility.ConvertPointFToPoint(p_0);
-                        Point anchorPos = new Point(intp_0.X, intp_0.Y + (int)offsetDir_ki.Y);
-                        IStructure house = structureFact.CreateHouse(anchorPos);
-                        //house.RotateCornersAroundPoint(cand.Rotation, anchorPos);
+                        Point anchorPos = new Point(intp_0.X, intp_0.Y);
+                        //IStructure house = structureFact.CreateHouse(anchorPos);
+                        IStructure house = structureFact.CreateHouse(potentialPlot);
                         n.AddStructure(house);
                         availablePlotFound = true;
                         break;

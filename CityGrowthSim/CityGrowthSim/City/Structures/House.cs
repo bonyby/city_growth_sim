@@ -8,10 +8,16 @@ namespace CityGrowthSim.City.Structures
     {
         IShape shape;
 
-        public House(Point position, IShape shape) : base(position)
+        public House(Point position, IShape shape, Size size) : base(position)
         {
             this.shape = shape;
-            Corners = this.shape.GenerateCorners(50, 50);
+            Corners = this.shape.GenerateCorners((uint)size.Width, (uint)size.Height);
+        }
+
+        public House(Point position, IShape shape, Point[] corners) : base(position)
+        {
+            this.shape = shape;
+            Corners = corners;
         }
     }
 }

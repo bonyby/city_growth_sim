@@ -184,6 +184,23 @@ namespace CityGrowthSim.Utility
         }
 
         /// <summary>
+        /// Moves all points by the given offset.
+        /// </summary>
+        /// <param name="points">Points to move</param>
+        /// <param name="offset">Offset to move</param>
+        /// <returns>New points moved by the specified offset</returns>
+        public static Point[] Move(Point[] points, Point offset)
+        {
+            Point[] temp = new Point[points.Length];
+            for (int i = 0; i < temp.Length; i++)
+            {
+                temp[i] = new Point(points[i].X + offset.X, points[i].Y + offset.Y);
+            }
+
+            return temp;
+        }
+
+        /// <summary>
         /// Normalizes the PointF as if it was a vector describing the given point
         /// </summary>
         /// <param name="point">PointF to normalize</param>
@@ -249,6 +266,16 @@ namespace CityGrowthSim.Utility
         }
 
         /// <summary>
+        /// Calculates the angle of a given point relative to the x-axis as if the point is a vector.
+        /// </summary>
+        /// <param name="point">Point/vector</param>
+        /// <returns>Angle between the point and the x-axis</returns>
+        public static double Angle(PointF point)
+        {
+            return Math.Atan2(point.Y, point.X);
+        }
+
+        /// <summary>
         /// Calculates the convex hull of the provided points.
         /// </summary>
         /// <param name="points">Points to generate convex hull of</param>
@@ -299,6 +326,17 @@ namespace CityGrowthSim.Utility
         public static bool CheckPolygonsIntersecting(PointF[] poly1, PointF[] poly2)
         {
             return GJK.PolygonsIntersecting(poly1, poly2);
+        }
+
+        /// <summary>
+        /// Calculates the point furthest in the given direction of the supplied points
+        /// </summary>
+        /// <param name="points">Points to compare</param>
+        /// <param name="dir">Direction to find the furthest point in</param>
+        /// <returns>The point furthest in the specified direction</returns>
+        public static Point FurthestPointInDirection(Point[] points, PointF dir)
+        {
+            return ConvertPointFToPoint(GJK.FurthestPointInDirection(ConvertPointsToPointFs(points), dir));
         }
 
         /// <summary>

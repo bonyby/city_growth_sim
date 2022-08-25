@@ -137,7 +137,7 @@ namespace CityGrowthSim.Utility
         /// <param name="poly">Polygon's points to check</param>
         /// <param name="dir">Direction to look in</param>
         /// <returns>Point in the polygon furthest away in the given direction</returns>
-        private static PointF FurthestPointInDirection(PointF[] poly, PointF dir)
+        public static PointF FurthestPointInDirection(PointF[] poly, PointF dir)
         {
             PointF furthest = poly[0];
             double val = double.MinValue;
