@@ -109,6 +109,10 @@ namespace CityGrowthSim.City
                     PointF offsetDir_ji = PointUtility.Multiply(dir_ji, 50); // Magic constants for now. Will change later
                     PointF offsetDir_ki = PointUtility.Multiply(dir_ki, 50);
                     float offset = 1;
+                    Console.WriteLine("#######");
+                    Console.WriteLine("p_i: " + p_i);
+                    Console.WriteLine("p_0.X: " + (p_i.X + dir_ji.X * offset));
+                    Console.WriteLine("#######");
                     PointF p_0 = new PointF(p_i.X + dir_ji.X * offset, p_i.Y); // Anchor/first point of the potential plot
                     Point[] potentialPlot = PointUtility.ConvertPointFsToPoints(new PointF[] { p_0,
                                                                                                new PointF(p_0.X + offsetDir_ji.X, p_0.Y),
@@ -131,6 +135,12 @@ namespace CityGrowthSim.City
                         Point intp_0 = PointUtility.ConvertPointFToPoint(p_0);
                         Point anchorPos = new Point(intp_0.X, intp_0.Y);
                         //IStructure house = structureFact.CreateHouse(anchorPos);
+                        Console.Write("Potential plot:");
+                        foreach (Point point in potentialPlot)
+                        {
+                            Console.Write(" " + point);
+                        }
+                        Console.WriteLine();
                         IStructure house = structureFact.CreateHouse(potentialPlot);
                         n.AddStructure(house);
                         availablePlotFound = true;

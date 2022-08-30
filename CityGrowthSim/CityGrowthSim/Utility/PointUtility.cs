@@ -212,6 +212,17 @@ namespace CityGrowthSim.Utility
         }
 
         /// <summary>
+        /// Calculates the distance between points p1 and p2
+        /// </summary>
+        /// <param name="p1">First point</param>
+        /// <param name="p2">Second point</param>
+        /// <returns>The distance between p1 and p2</returns>
+        public static double Distance(PointF p1, PointF p2)
+        {
+            return Math.Sqrt(Math.Pow(p1.X - p2.X, 2) + Math.Pow(p1.Y - p2.Y, 2));
+        }
+
+        /// <summary>
         /// Subtracts the second point from the first coordinate wise
         /// </summary>
         /// <param name="p1">Point to subtract from</param>
