@@ -234,6 +234,17 @@ namespace CityGrowthSim.Utility
         }
 
         /// <summary>
+        /// Adds the second point to the first coordinate wise
+        /// </summary>
+        /// <param name="p1">Point to add to</param>
+        /// <param name="p2">Point to add</param>
+        /// <returns>PointF describing p1+p2</returns>
+        public static PointF Add(PointF p1, PointF p2)
+        {
+            return new PointF(p1.X + p2.X, p1.Y + p2.Y);
+        }
+
+        /// <summary>
         /// Calculates the dot product between the points as if they were vectors.
         /// </summary>
         /// <param name="p1">First point</param>

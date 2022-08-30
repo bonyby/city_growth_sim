@@ -2,6 +2,6 @@
 
 // either random or a 32-bit number
 RandomObjectSeed=random
-SimulationHz=2
+SimulationHz=5
 DefaultWindowWidth=1000
 DefaultWindowHeight=750

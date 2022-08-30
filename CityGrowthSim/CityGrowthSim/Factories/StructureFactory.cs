@@ -50,6 +50,7 @@ namespace CityGrowthSim.Factories
             Point p_2 = PointUtility.FurthestPointInDirection(plot, PointUtility.Normalize(new PointF(1, 1)));   // Define p_2 to be the point furthest down in the right corner (under p_1)
             double width = PointUtility.Distance(p_0, p_1);
             double height = PointUtility.Distance(p_1, p_2);
+            // -- TODO: Check if width or height = 0
             //double width = Math.Sqrt(Math.Pow(p_0.X - p_1.X, 2) + Math.Pow(p_0.Y - p_1.Y, 2));
             //double height = Math.Sqrt(Math.Pow(p_1.X - p_2.X, 2) + Math.Pow(p_1.Y - p_2.Y, 2));
 
@@ -77,7 +78,7 @@ namespace CityGrowthSim.Factories
             //    Console.WriteLine(point);
             //}
             shapeCorners = PointUtility.ConvertPointFsToPoints(shapeCornersF);
-            shapeCorners = PointUtility.Move(shapeCorners, p_0);
+            //shapeCorners = PointUtility.Move(shapeCorners, p_0);
             //Console.WriteLine("ShapeCorners 3");
             //foreach (Point point in shapeCorners)
             //{

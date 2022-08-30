@@ -99,25 +99,36 @@ namespace CityGrowthSim.City
 
                 // Check for available space next to each of the corners of the MBBox of the candidate
                 Point[] mBBox = cand.MinimumBoundingBox;
+                int iOffset = random.Next(mBBox.Length); // Random number to offset i. Used to ensure randomness when looking through all corners of MBBox
                 for (int i = 0; i < mBBox.Length; i++)
                 {
-                    Point p_i = mBBox[i];
-                    Point p_j = mBBox[(i + 1) % mBBox.Length]; // next corner
-                    Point p_k = mBBox[(mBBox.Length + i - 1) % mBBox.Length]; // previous corner (needs to add the length of the array in case i=0 which results in -1 otherwise)
+                    int index = (i + iOffset) % mBBox.Length;
+                    Point p_i = mBBox[index];
+                    Point p_j = mBBox[(index + 1) % mBBox.Length]; // next corner
+                    Point p_k = mBBox[(mBBox.Length + index - 1) % mBBox.Length]; // previous corner (needs to add the length of the array in case i=0 which results in -1 otherwise)
                     PointF dir_ji = PointUtility.DirectionTo(p_j, p_i);
                     PointF dir_ki = PointUtility.DirectionTo(p_k, p_i);
-                    PointF offsetDir_ji = PointUtility.Multiply(dir_ji, 50); // Magic constants for now. Will change later
-                    PointF offsetDir_ki = PointUtility.Multiply(dir_ki, 50);
                     float offset = 1;
-                    Console.WriteLine("#######");
-                    Console.WriteLine("p_i: " + p_i);
-                    Console.WriteLine("p_0.X: " + (p_i.X + dir_ji.X * offset));
-                    Console.WriteLine("#######");
-                    PointF p_0 = new PointF(p_i.X + dir_ji.X * offset, p_i.Y); // Anchor/first point of the potential plot
-                    Point[] potentialPlot = PointUtility.ConvertPointFsToPoints(new PointF[] { p_0,
-                                                                                               new PointF(p_0.X + offsetDir_ji.X, p_0.Y),
-                                                                                               new PointF(p_0.X + offsetDir_ji.X, p_0.Y - offsetDir_ki.Y),
-                                                                                               new PointF(p_0.X, p_0.Y - offsetDir_ki.Y) });
+                    PointF smallOffsetDir_ji = PointUtility.Multiply(dir_ji, offset);
+                    PointF smallOffsetDir_ki = PointUtility.Multiply(dir_ki, offset);
+                    PointF largeOffsetDir_ji = PointUtility.Multiply(dir_ji, 50); // Magic constants for now. Will change later
+                    PointF largeOffsetDir_ki = PointUtility.Multiply(dir_ki, 50);
+
+                    PointF p_0 = PointUtility.Add(PointUtility.Add(p_i, smallOffsetDir_ji), smallOffsetDir_ki); // Anchor/first point of the potential plot
+                    Point[] potentialPlot;
+                    if (random.Next(2) == 1) // Choose a random direction for the new plot. !!!!!! VERY PROTOTYPE-ISH SPAGHETTI CODE !!!!!!
+                    {
+                        potentialPlot = PointUtility.ConvertPointFsToPoints(new PointF[] { p_0,
+                                                                                            new PointF(p_0.X + largeOffsetDir_ji.X + largeOffsetDir_ki.X, p_0.Y),
+                                                                                            new PointF(p_0.X + largeOffsetDir_ji.X + largeOffsetDir_ki.X, p_0.Y - largeOffsetDir_ji.Y - largeOffsetDir_ki.Y),
+                                                                                            new PointF(p_0.X, p_0.Y - largeOffsetDir_ji.Y - largeOffsetDir_ki.Y) });
+                    } else
+                    {
+                        potentialPlot = PointUtility.ConvertPointFsToPoints(new PointF[] { p_0,
+                                                                                            new PointF(p_0.X, p_0.Y - largeOffsetDir_ji.Y - largeOffsetDir_ki.Y),
+                                                                                            new PointF(p_0.X + largeOffsetDir_ji.X + largeOffsetDir_ki.X, p_0.Y - largeOffsetDir_ji.Y - largeOffsetDir_ki.Y),
+                                                                                            new PointF(p_0.X + largeOffsetDir_ji.X + largeOffsetDir_ki.X, p_0.Y) });
+                    }
 
                     // Check for an intersection with each structure in the neighbourhood except for the candidate itself
                     bool intersection = false;

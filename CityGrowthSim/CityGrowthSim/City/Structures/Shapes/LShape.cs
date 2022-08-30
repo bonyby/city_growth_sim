@@ -18,10 +18,10 @@ namespace CityGrowthSim.City.Structures.Shapes
         // Same as RectangleShape... Min. widths & heights are calculated with magic constants for now to have a basic prototype
         public override Point[] GenerateCorners(uint width, uint height)
         {
-            int minWidth = (int)(width / 2);
-            int minHeight = (int)(height / 10 * 4);
-            int maxWidth = (int)(width / 10 * 8);
-            int maxHeight = (int)(height / 10 * 6);
+            int minWidth = (int)((double) width / 2);
+            int minHeight = (int)((double) height / 10 * 4);
+            int maxWidth = (int)((double) width / 10 * 8);
+            int maxHeight = (int)((double) height / 10 * 6);
 
             // Width and height of main shape
             int w1 = Random.Next(minWidth, maxWidth);
