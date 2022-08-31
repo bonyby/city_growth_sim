@@ -57,7 +57,6 @@ namespace CityGrowthSim.City
             Neighbourhood n = neighbourhoods[0];
             List<IStructure> candidates = new List<IStructure>(n.NewNeighbourCandidates.ToList());
 
-
             // TODO: Look through neighbour candidates untill an available space has been found.
             // just placing besides some candidate now without collision detection to prototype.
 
@@ -71,24 +70,8 @@ namespace CityGrowthSim.City
             }
 
             // I'm so sorry for anyone having to look at this prototype spaghet.. *cough* code
-            //int numb = random.Next(neighbourCandidates.Count);
-            //IStructure cand = neighbourCandidates[numb];
-            //Point[] candMBBox = cand.MinimumBoundingBox;
-            //int i = random.Next(candMBBox.Length);
-            //Point p_i = candMBBox[i];
-            ////Console.WriteLine("p_i: " + p_i);
-            //int j = (candMBBox.Length + i + (random.Next(2) * 2 - 1)) % candMBBox.Length;
-            //Point p_j = candMBBox[j];
-            //PointF vec_ij = new PointF((p_j.X - p_i.X), (p_j.Y - p_i.Y));
-            //double vec_ijLen = Math.Sqrt(Math.Pow(vec_ij.X, 2) + Math.Pow(vec_ij.Y, 2));
-            //PointF vec_ij_norm = new PointF((float)(vec_ij.X / vec_ijLen), (float)(vec_ij.Y / vec_ijLen));
-            //Point pos = new Point(p_i.X - (int)Math.Round(vec_ij.X), p_i.Y - (int)Math.Round(vec_ij.Y));
-            //IStructure house = structureFact.CreateHouse(pos);
-            //house.RotateCornersAroundCentroid(cand.Rotation + random.Next(11) - 5);
-            //n.AddStructure(house);
 
             // Continue looking for an available plot besides an existing structure
-            // -- (still prototyping for now, but a bit cleaner than the code above, atleast)
             bool availablePlotFound = false;
             do
             {
@@ -109,26 +92,12 @@ namespace CityGrowthSim.City
                     PointF dir_ji = PointUtility.DirectionTo(p_j, p_i);
                     PointF dir_ki = PointUtility.DirectionTo(p_k, p_i);
                     float offset = 1;
-                    PointF smallOffsetDir_ji = PointUtility.Multiply(dir_ji, offset);
-                    PointF smallOffsetDir_ki = PointUtility.Multiply(dir_ki, offset);
-                    PointF largeOffsetDir_ji = PointUtility.Multiply(dir_ji, 50); // Magic constants for now. Will change later
-                    PointF largeOffsetDir_ki = PointUtility.Multiply(dir_ki, 50);
+                    float width = 50; // placeholder for now
+                    float height = 50;
 
-                    PointF p_0 = PointUtility.Add(PointUtility.Add(p_i, smallOffsetDir_ji), smallOffsetDir_ki); // Anchor/first point of the potential plot
-                    Point[] potentialPlot;
-                    if (random.Next(2) == 1) // Choose a random direction for the new plot. !!!!!! VERY PROTOTYPE-ISH SPAGHETTI CODE !!!!!!
-                    {
-                        potentialPlot = PointUtility.ConvertPointFsToPoints(new PointF[] { p_0,
-                                                                                            new PointF(p_0.X + largeOffsetDir_ji.X + largeOffsetDir_ki.X, p_0.Y),
-                                                                                            new PointF(p_0.X + largeOffsetDir_ji.X + largeOffsetDir_ki.X, p_0.Y - largeOffsetDir_ji.Y - largeOffsetDir_ki.Y),
-                                                                                            new PointF(p_0.X, p_0.Y - largeOffsetDir_ji.Y - largeOffsetDir_ki.Y) });
-                    } else
-                    {
-                        potentialPlot = PointUtility.ConvertPointFsToPoints(new PointF[] { p_0,
-                                                                                            new PointF(p_0.X, p_0.Y - largeOffsetDir_ji.Y - largeOffsetDir_ki.Y),
-                                                                                            new PointF(p_0.X + largeOffsetDir_ji.X + largeOffsetDir_ki.X, p_0.Y - largeOffsetDir_ji.Y - largeOffsetDir_ki.Y),
-                                                                                            new PointF(p_0.X + largeOffsetDir_ji.X + largeOffsetDir_ki.X, p_0.Y) });
-                    }
+                    // Generate potential plots to each side of the corner
+                    Point[] plot1 = GeneratePotentialPlot(p_i, dir_ji, dir_ki, offset, width, height);
+                    Point[] plot2 = GeneratePotentialPlot(p_i, dir_ki, dir_ji, offset, width, height);
 
                     // Check for an intersection with each structure in the neighbourhood except for the candidate itself
                     bool intersection = false;
@@ -136,23 +105,43 @@ namespace CityGrowthSim.City
                     candList.Add(cand);
                     foreach (IStructure structure in n.Structures.Except(candList))
                     {
-                        bool inter = PointUtility.CheckPolygonsIntersecting(potentialPlot, structure.MinimumBoundingBox);
+                        bool inter = PointUtility.CheckPolygonsIntersecting(plot1, structure.MinimumBoundingBox);
                         if (inter) { intersection = true; break; }
                     }
 
                     // Add the new house if an available plot found
                     if (!intersection)
                     {
-                        Point intp_0 = PointUtility.ConvertPointFToPoint(p_0);
-                        Point anchorPos = new Point(intp_0.X, intp_0.Y);
-                        //IStructure house = structureFact.CreateHouse(anchorPos);
-                        Console.Write("Potential plot:");
-                        foreach (Point point in potentialPlot)
-                        {
-                            Console.Write(" " + point);
-                        }
-                        Console.WriteLine();
-                        IStructure house = structureFact.CreateHouse(potentialPlot);
+                        //Console.Write("Potential plot:");
+                        //foreach (Point point in potentialPlot)
+                        //{
+                        //    Console.Write(" " + point);
+                        //}
+                        //Console.WriteLine();
+                        IStructure house = structureFact.CreateHouse(plot1);
+                        n.AddStructure(house);
+                        availablePlotFound = true;
+                        break;
+                    }
+
+                    // !!!! JUST COPIED FOR NOW - SIMPLY TESTING !!!!!
+                    intersection = false;
+                    foreach (IStructure structure in n.Structures.Except(candList))
+                    {
+                        bool inter = PointUtility.CheckPolygonsIntersecting(plot2, structure.MinimumBoundingBox);
+                        if (inter) { intersection = true; break; }
+                    }
+
+                    // Add the new house if an available plot found
+                    if (!intersection)
+                    {
+                        //Console.Write("Potential plot:");
+                        //foreach (Point point in potentialPlot)
+                        //{
+                        //    Console.Write(" " + point);
+                        //}
+                        //Console.WriteLine();
+                        IStructure house = structureFact.CreateHouse(plot2);
                         n.AddStructure(house);
                         availablePlotFound = true;
                         break;
@@ -165,6 +154,20 @@ namespace CityGrowthSim.City
             } while (candidates.Count > 0 && !availablePlotFound);
 
             return;
+
+            Point[] GeneratePotentialPlot(PointF pos, PointF primaryDir, PointF secondaryDir, float offset, float width, float height)
+            {
+                PointF primOffset = PointUtility.Multiply(primaryDir, offset);
+                PointF primWidth = PointUtility.Multiply(primaryDir, width);
+                PointF secondHeight = PointUtility.Multiply(secondaryDir, height);
+
+                PointF p_0 = PointUtility.Add(pos, primOffset); // Anchor/first point of the potential plot
+                PointF p_1 = PointUtility.Add(p_0, primWidth);
+                PointF p_2 = PointUtility.Subtract(p_1, secondHeight);
+                PointF p_3 = PointUtility.Subtract(p_2, primWidth);
+
+                return PointUtility.ConvertPointFsToPoints(new PointF[] { p_0, p_1, p_2, p_3 });
+            }
         }
 
         private void CreateNewNeighbourhood()
