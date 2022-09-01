@@ -16,7 +16,7 @@ namespace CityGrowthSim.Utility
         /// <param name="degrees">Degrees to rotate</param>
         /// <param name="rotatePoint">Point to rotate around</param>
         /// <returns>Rotated points</returns>
-        public static PointF[] RotatePointsAroundPointPrecise(PointF[] points, double degrees, PointF rotatePoint)
+        public static PointF[] RotatePointsAroundPointF(PointF[] points, double degrees, PointF rotatePoint)
         {
             if (points == null || points.Length == 0) { return new PointF[0]; }
 
@@ -56,7 +56,7 @@ namespace CityGrowthSim.Utility
         {
             PointF c = CalculateCentroid(points);
 
-            return RotatePointsAroundPointPrecise(points, degrees, c);
+            return RotatePointsAroundPointF(points, degrees, c);
         }
 
         /// <summary>
@@ -153,13 +153,13 @@ namespace CityGrowthSim.Utility
                 double polarAngle = Math.Atan2(sVector.Y, sVector.X) / (Math.PI / 180); // in degrees
 
                 //Console.WriteLine("New candidate");
-                PointF[] candidate = RotatePointsAroundPointPrecise(convexHullF, polarAngle, centroid);
+                PointF[] candidate = RotatePointsAroundPointF(convexHullF, polarAngle, centroid);
                 (PointF[] cand, double area) = GetCandidateBBoxAndArea(candidate);
 
                 if (area < bestArea)
                 {
                     //Console.WriteLine("Found new best");
-                    minBBox = RotatePointsAroundPointPrecise(cand, -polarAngle, centroid);
+                    minBBox = RotatePointsAroundPointF(cand, -polarAngle, centroid);
                 }
             }
 
@@ -198,6 +198,29 @@ namespace CityGrowthSim.Utility
             }
 
             return temp;
+        }
+
+        /// <summary>
+        /// Rotates the given point around origo by the specified degrees as if it was a vector.
+        /// </summary>
+        /// <param name="point">Point to rotate</param>
+        /// <param name="degrees">Degrees to rotate</param>
+        /// <returns>The rotate point</returns>
+        public static PointF Rotate(PointF point, double degrees)
+        {
+            PointF newP = new PointF(point.X, point.Y);
+            double rad = degrees * (Math.PI / 180);
+            double cos = Math.Cos(rad);
+            double sin = Math.Sin(rad);
+            double newX = newP.X * cos + newP.Y * sin;
+            double newY = -newP.X * sin + newP.Y * cos;
+            newP.X = (float)newX;
+            newP.Y = (float)newY;
+
+            Console.WriteLine("Point: " + point);
+            Console.WriteLine("Rotated: " + newP);
+
+            return newP;
         }
 
         /// <summary>
@@ -358,7 +381,18 @@ namespace CityGrowthSim.Utility
         /// <returns>The point furthest in the specified direction</returns>
         public static Point FurthestPointInDirection(Point[] points, PointF dir)
         {
-            return ConvertPointFToPoint(GJK.FurthestPointInDirection(ConvertPointsToPointFs(points), dir));
+            return ConvertPointFToPoint(FurthestPointInDirection(ConvertPointsToPointFs(points), dir));
+        }
+
+        /// <summary>
+        /// Calculates the point furthest in the given direction of the supplied points
+        /// </summary>
+        /// <param name="points">Points to compare</param>
+        /// <param name="dir">Direction to find the furthest point in</param>
+        /// <returns>The point furthest in the specified direction</returns>
+        public static PointF FurthestPointInDirection(PointF[] points, PointF dir)
+        {
+            return GJK.FurthestPointInDirection(points, dir);
         }
 
         /// <summary>

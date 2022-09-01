@@ -37,16 +37,23 @@ namespace CityGrowthSim.Factories
 
         /// <summary>
         /// Creates a house with a random shape within the plot supplied.
+        /// Tries to push the house towards the edge of the plot in the alignment direction.
         /// </summary>
         /// <param name="plot">The plot where the house should be created. Assumed to be a rectangle</param>
+        /// <param name="alignmentDir">The direction to push the house as far as possible (inside of the plot)</param>
         /// <returns>The house</returns>
-        public IStructure CreateHouse(Point[] plot)
+        public IStructure CreateHouse(Point[] plot, PointF alignmentDir)
         {
+
+            ////// !!!! Accidentally messed something up... but too late now - will check back in at a later point 😴
+            ////// (seems to be my PointUtility.Rotate function that messes up). Nevermind I fixed it now - messed up degrees -> radians.... More fixing tomorrow
+
             // Calculate the width and height of the plot.
             // The plot might be rotated, so can't take simply take the difference for each axis
-            Point p_0 = PointUtility.FurthestPointInDirection(plot, PointUtility.Normalize(new PointF(-1, -1))); // Define p_0 to be the point furthest up in the left corner
-            Point p_1 = PointUtility.FurthestPointInDirection(plot, PointUtility.Normalize(new PointF(1, -1)));  // Define p_1 to be the point furthest up in the right corner (to the right of p_0)
-            Point p_2 = PointUtility.FurthestPointInDirection(plot, PointUtility.Normalize(new PointF(1, 1)));   // Define p_2 to be the point furthest down in the right corner (under p_1)
+            PointF normAlignDir = PointUtility.Normalize(alignmentDir);
+            Point p_0 = PointUtility.FurthestPointInDirection(plot, normAlignDir); // Define p_0 to be the point furthest in the alignment direction
+            Point p_1 = PointUtility.FurthestPointInDirection(plot, PointUtility.Rotate(normAlignDir, 90));  // Define p_1 to be the point furthest in orthogonal direction to the alignment direction (to the right)
+            Point p_2 = PointUtility.FurthestPointInDirection(plot, PointUtility.Negate(normAlignDir));   // Define p_2 to be the point furthest in the opposite direction of the alignment direction
             double width = PointUtility.Distance(p_0, p_1);
             double height = PointUtility.Distance(p_1, p_2);
 
@@ -64,9 +71,57 @@ namespace CityGrowthSim.Factories
             Console.WriteLine("Angle: " + angle);
             IShape shape = shapeFact.CreateShape("random");
             PointF[] shapeCorners = PointUtility.ConvertPointsToPointFs(shape.GenerateCorners((uint)width, (uint)height));
-            shapeCorners = PointUtility.RotatePointsAroundPointPrecise(shapeCorners, angle, PointUtility.ConvertPointToPointF(p_0));
+            //shapeCorners = PointUtility.RotatePointsAroundPointF(shapeCorners, angle, PointUtility.ConvertPointToPointF(p_0));
+            shapeCorners = PointUtility.RotatePointsAroundCentroidPrecise(shapeCorners, angle);
 
-            return new House(p_0, shape, PointUtility.ConvertPointFsToPoints(shapeCorners));
+            PointF anchor = PointUtility.FurthestPointInDirection(shapeCorners, PointUtility.Normalize(new PointF(-1, -1)));
+            anchor = PointUtility.Add(anchor, p_0);
+
+            Console.WriteLine("Anchor: " + anchor);
+            Console.WriteLine("//House corners (moved to anchor)//");
+            foreach (PointF point in shapeCorners)
+            {
+                Console.WriteLine(PointUtility.Add(anchor, point));
+            }
+
+            return new House(PointUtility.ConvertPointFToPoint(anchor), shape, PointUtility.ConvertPointFsToPoints(shapeCorners));
+
+            //// Calculate the width and height of the plot.
+            //// The plot might be rotated, so can't take simply take the difference for each axis
+            //Point p_0 = PointUtility.FurthestPointInDirection(plot, PointUtility.Normalize(new PointF(-1, -1))); // Define p_0 to be the point furthest up in the left corner
+            //Point p_1 = PointUtility.FurthestPointInDirection(plot, PointUtility.Normalize(new PointF(1, -1)));  // Define p_1 to be the point furthest up in the right corner (to the right of p_0)
+            //Point p_2 = PointUtility.FurthestPointInDirection(plot, PointUtility.Normalize(new PointF(1, 1)));   // Define p_2 to be the point furthest down in the right corner (under p_1)
+            //double width = PointUtility.Distance(p_0, p_1);
+            //double height = PointUtility.Distance(p_1, p_2);
+
+            //if (width == 0 && height == 0) return null;
+
+            //Console.WriteLine("--Plot--");
+            //foreach (Point point in plot)
+            //{
+            //    Console.WriteLine(point);
+            //}
+
+            //// Create a shape within the boundaries of the plot
+            //PointF dirp_0p_1 = PointUtility.DirectionTo(p_0, p_1);
+            //double angle = PointUtility.Angle(dirp_0p_1);
+            //Console.WriteLine("Angle: " + angle);
+            //IShape shape = shapeFact.CreateShape("random");
+            //PointF[] shapeCorners = PointUtility.ConvertPointsToPointFs(shape.GenerateCorners((uint)width, (uint)height));
+            ////shapeCorners = PointUtility.RotatePointsAroundPointF(shapeCorners, angle, PointUtility.ConvertPointToPointF(p_0));
+            //shapeCorners = PointUtility.RotatePointsAroundCentroidPrecise(shapeCorners, angle);
+
+            //PointF anchor = PointUtility.FurthestPointInDirection(shapeCorners, PointUtility.Normalize(new PointF(-1, -1)));
+            //anchor = PointUtility.Add(anchor, p_0);
+
+            //Console.WriteLine("Anchor: " + anchor);
+            //Console.WriteLine("//House corners (moved to anchor)//");
+            //foreach (PointF point in shapeCorners)
+            //{
+            //    Console.WriteLine(PointUtility.Add(anchor, point));
+            //}
+
+            //return new House(PointUtility.ConvertPointFToPoint(anchor), shape, PointUtility.ConvertPointFsToPoints(shapeCorners));
         }
     }
 }

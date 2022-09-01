@@ -64,7 +64,8 @@ namespace CityGrowthSim.City
             if (candidates.Count == 0)
             {
                 IStructure h = structureFact.CreateHouse(new Point(random.Next(750), random.Next(500)));
-                h.RotateCornersAroundCentroid(random.Next(360));
+                //h.RotateCornersAroundCentroid(random.Next(360));
+                h.RotateCornersAroundCentroid(35);
                 n.AddStructure(h);
                 return;
             }
@@ -82,6 +83,11 @@ namespace CityGrowthSim.City
 
                 // Check for available space next to each of the corners of the MBBox of the candidate
                 Point[] mBBox = cand.MinimumBoundingBox;
+                Console.WriteLine("##Cand MBBox##");
+                foreach (Point point in mBBox)
+                {
+                    Console.WriteLine(point);
+                }
                 int iOffset = random.Next(mBBox.Length); // Random number to offset i. Used to ensure randomness when looking through all corners of MBBox
                 for (int i = 0; i < mBBox.Length; i++)
                 {
@@ -112,13 +118,7 @@ namespace CityGrowthSim.City
                     // Add the new house if an available plot found
                     if (!intersection)
                     {
-                        //Console.Write("Potential plot:");
-                        //foreach (Point point in potentialPlot)
-                        //{
-                        //    Console.Write(" " + point);
-                        //}
-                        //Console.WriteLine();
-                        IStructure house = structureFact.CreateHouse(plot1);
+                        IStructure house = structureFact.CreateHouse(plot1, new PointF(-1, -1));
                         if (house != null)
                         {
                             n.AddStructure(house);
@@ -138,13 +138,7 @@ namespace CityGrowthSim.City
                     // Add the new house if an available plot found
                     if (!intersection)
                     {
-                        //Console.Write("Potential plot:");
-                        //foreach (Point point in potentialPlot)
-                        //{
-                        //    Console.Write(" " + point);
-                        //}
-                        //Console.WriteLine();
-                        IStructure house = structureFact.CreateHouse(plot2);
+                        IStructure house = structureFact.CreateHouse(plot2, new PointF(-1, -1));
                         if (house != null)
                         {
                             n.AddStructure(house);
