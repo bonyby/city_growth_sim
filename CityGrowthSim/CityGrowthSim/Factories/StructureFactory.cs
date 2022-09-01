@@ -42,7 +42,6 @@ namespace CityGrowthSim.Factories
         /// <returns>The house</returns>
         public IStructure CreateHouse(Point[] plot)
         {
-            //Console.WriteLine("---");
             // Calculate the width and height of the plot.
             // The plot might be rotated, so can't take simply take the difference for each axis
             Point p_0 = PointUtility.FurthestPointInDirection(plot, PointUtility.Normalize(new PointF(-1, -1))); // Define p_0 to be the point furthest up in the left corner
@@ -50,50 +49,24 @@ namespace CityGrowthSim.Factories
             Point p_2 = PointUtility.FurthestPointInDirection(plot, PointUtility.Normalize(new PointF(1, 1)));   // Define p_2 to be the point furthest down in the right corner (under p_1)
             double width = PointUtility.Distance(p_0, p_1);
             double height = PointUtility.Distance(p_1, p_2);
-            // -- TODO: Check if width or height = 0
-            //double width = Math.Sqrt(Math.Pow(p_0.X - p_1.X, 2) + Math.Pow(p_0.Y - p_1.Y, 2));
-            //double height = Math.Sqrt(Math.Pow(p_1.X - p_2.X, 2) + Math.Pow(p_1.Y - p_2.Y, 2));
 
-            // TODO: Fix width & height being 0. Probably a problem related to how the plot points are being calculated in the CityPlanner.
-            //Console.WriteLine("p_0: " + p_0);
-            //Console.WriteLine("p_1: " + p_1);
-            //Console.WriteLine("p_2: " + p_2);
-            //Console.WriteLine("Width: " + width);
-            //Console.WriteLine("Height: " + height);
+            if (width == 0 && height == 0) return null;
+
+            Console.WriteLine("--Plot--");
+            foreach (Point point in plot)
+            {
+                Console.WriteLine(point);
+            }
 
             // Create a shape within the boundaries of the plot
             PointF dirp_0p_1 = PointUtility.DirectionTo(p_0, p_1);
-            double plotRot = PointUtility.Angle(dirp_0p_1);
+            double angle = PointUtility.Angle(dirp_0p_1);
+            Console.WriteLine("Angle: " + angle);
             IShape shape = shapeFact.CreateShape("random");
-            Point[] shapeCorners = shape.GenerateCorners((uint)width, (uint)height);
-            //Console.WriteLine("ShapeCorners 1");
-            //foreach (Point point in shapeCorners)
-            //{
-            //    Console.WriteLine(point);
-            //}
-            PointF[] shapeCornersF = PointUtility.RotatePointsAroundPointPrecise(PointUtility.ConvertPointsToPointFs(shapeCorners), plotRot, PointUtility.ConvertPointToPointF(p_0));
-            //Console.WriteLine("ShapeCorners 2");
-            //foreach (PointF point in shapeCornersF)
-            //{
-            //    Console.WriteLine(point);
-            //}
-            shapeCorners = PointUtility.ConvertPointFsToPoints(shapeCornersF);
-            //shapeCorners = PointUtility.Move(shapeCorners, p_0);
-            //Console.WriteLine("ShapeCorners 3");
-            //foreach (Point point in shapeCorners)
-            //{
-            //    Console.WriteLine(point);
-            //}
-            //Console.WriteLine("Plot points");
-            //foreach (Point point in plot)
-            //{
-            //    Console.WriteLine(point);
-            //}
-            //Console.WriteLine("p_0: " + p_0);
-            //Console.WriteLine("p_1: " + p_1);
-            //Console.WriteLine("p_2: " + p_2);
+            PointF[] shapeCorners = PointUtility.ConvertPointsToPointFs(shape.GenerateCorners((uint)width, (uint)height));
+            shapeCorners = PointUtility.RotatePointsAroundPointPrecise(shapeCorners, angle, PointUtility.ConvertPointToPointF(p_0));
 
-            return new House(p_0, shape, shapeCorners);
+            return new House(p_0, shape, PointUtility.ConvertPointFsToPoints(shapeCorners));
         }
     }
 }

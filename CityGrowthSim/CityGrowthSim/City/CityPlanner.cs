@@ -119,9 +119,12 @@ namespace CityGrowthSim.City
                         //}
                         //Console.WriteLine();
                         IStructure house = structureFact.CreateHouse(plot1);
-                        n.AddStructure(house);
-                        availablePlotFound = true;
-                        break;
+                        if (house != null)
+                        {
+                            n.AddStructure(house);
+                            availablePlotFound = true;
+                            break;
+                        }
                     }
 
                     // !!!! JUST COPIED FOR NOW - SIMPLY TESTING !!!!!
@@ -142,9 +145,12 @@ namespace CityGrowthSim.City
                         //}
                         //Console.WriteLine();
                         IStructure house = structureFact.CreateHouse(plot2);
-                        n.AddStructure(house);
-                        availablePlotFound = true;
-                        break;
+                        if (house != null)
+                        {
+                            n.AddStructure(house);
+                            availablePlotFound = true;
+                            break;
+                        }
                     }
                 }
 

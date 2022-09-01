@@ -288,13 +288,13 @@ namespace CityGrowthSim.Utility
         }
 
         /// <summary>
-        /// Calculates the angle of a given point relative to the x-axis as if the point is a vector.
+        /// Calculates the angle (in degrees) of a given point relative to the x-axis as if the point is a vector.
         /// </summary>
         /// <param name="point">Point/vector</param>
-        /// <returns>Angle between the point and the x-axis</returns>
+        /// <returns>Angle between the point and the x-axis in degrees</returns>
         public static double Angle(PointF point)
         {
-            return Math.Atan2(point.Y, point.X);
+            return Math.Atan2(point.Y, point.X) * (180 / Math.PI);
         }
 
         /// <summary>
