@@ -51,11 +51,17 @@ namespace CityGrowthSim.Factories
             // Calculate the width and height of the plot.
             // The plot might be rotated, so can't take simply take the difference for each axis
             PointF normAlignDir = PointUtility.Normalize(alignmentDir);
+            Console.WriteLine("Alignment direction: " + alignmentDir);
+            Console.WriteLine("Normalized alignment direction: " + normAlignDir);
             Point p_0 = PointUtility.FurthestPointInDirection(plot, normAlignDir); // Define p_0 to be the point furthest in the alignment direction
             Point p_1 = PointUtility.FurthestPointInDirection(plot, PointUtility.Rotate(normAlignDir, 90));  // Define p_1 to be the point furthest in orthogonal direction to the alignment direction (to the right)
             Point p_2 = PointUtility.FurthestPointInDirection(plot, PointUtility.Negate(normAlignDir));   // Define p_2 to be the point furthest in the opposite direction of the alignment direction
             double width = PointUtility.Distance(p_0, p_1);
             double height = PointUtility.Distance(p_1, p_2);
+
+            Console.WriteLine("P0: " + p_0);
+            Console.WriteLine("P1: " + p_1);
+            Console.WriteLine("P2: " + p_2);
 
             if (width == 0 && height == 0) return null;
 
@@ -67,24 +73,27 @@ namespace CityGrowthSim.Factories
 
             // Create a shape within the boundaries of the plot
             PointF dirp_0p_1 = PointUtility.DirectionTo(p_0, p_1);
-            double angle = PointUtility.Angle(dirp_0p_1);
+            double angle = PointUtility.Angle(dirp_0p_1) + (random.NextDouble() * 10 - 5);
             Console.WriteLine("Angle: " + angle);
             IShape shape = shapeFact.CreateShape("random");
             PointF[] shapeCorners = PointUtility.ConvertPointsToPointFs(shape.GenerateCorners((uint)width, (uint)height));
-            //shapeCorners = PointUtility.RotatePointsAroundPointF(shapeCorners, angle, PointUtility.ConvertPointToPointF(p_0));
-            shapeCorners = PointUtility.RotatePointsAroundCentroidPrecise(shapeCorners, angle);
+            shapeCorners = PointUtility.RotatePointsAroundCentroidPrecise(shapeCorners, -angle);
+            //shapeCorners = PointUtility.RotatePointsAroundPointF(shapeCorners, -angle, anchor);
 
-            PointF anchor = PointUtility.FurthestPointInDirection(shapeCorners, PointUtility.Normalize(new PointF(-1, -1)));
-            anchor = PointUtility.Add(anchor, p_0);
+            PointF anchor = PointUtility.FurthestPointInDirection(shapeCorners, normAlignDir);
+            //PointF movePoint = new PointF(Math.Min(anchor.X, 0), Math.Min(anchor.Y, 0));
+            PointF offset = PointUtility.Negate(anchor);
 
-            Console.WriteLine("Anchor: " + anchor);
-            Console.WriteLine("//House corners (moved to anchor)//");
+            shapeCorners = PointUtility.Move(shapeCorners, offset);
+
+            //Console.WriteLine("Anchor: " + anchor);
+            Console.WriteLine("//House corners (moved to P0)//");
             foreach (PointF point in shapeCorners)
             {
-                Console.WriteLine(PointUtility.Add(anchor, point));
+                Console.WriteLine(PointUtility.Add(p_0, point));
             }
 
-            return new House(PointUtility.ConvertPointFToPoint(anchor), shape, PointUtility.ConvertPointFsToPoints(shapeCorners));
+            return new House(p_0, shape, PointUtility.ConvertPointFsToPoints(shapeCorners));
 
             //// Calculate the width and height of the plot.
             //// The plot might be rotated, so can't take simply take the difference for each axis

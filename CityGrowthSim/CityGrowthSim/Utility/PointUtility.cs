@@ -191,10 +191,23 @@ namespace CityGrowthSim.Utility
         /// <returns>New points moved by the specified offset</returns>
         public static Point[] Move(Point[] points, Point offset)
         {
-            Point[] temp = new Point[points.Length];
+            PointF[] ps = ConvertPointsToPointFs(points);
+            PointF off = ConvertPointToPointF(offset);
+            return ConvertPointFsToPoints(Move(ps, off));
+        }
+
+        /// <summary>
+        /// Moves all points by the given offset.
+        /// </summary>
+        /// <param name="points">Points to move</param>
+        /// <param name="offset">Offset to move</param>
+        /// <returns>New points moved by the specified offset</returns>
+        public static PointF[] Move(PointF[] points, PointF offset)
+        {
+            PointF[] temp = new PointF[points.Length];
             for (int i = 0; i < temp.Length; i++)
             {
-                temp[i] = new Point(points[i].X + offset.X, points[i].Y + offset.Y);
+                temp[i] = new PointF(points[i].X + offset.X, points[i].Y + offset.Y);
             }
 
             return temp;
@@ -216,9 +229,6 @@ namespace CityGrowthSim.Utility
             double newY = -newP.X * sin + newP.Y * cos;
             newP.X = (float)newX;
             newP.Y = (float)newY;
-
-            Console.WriteLine("Point: " + point);
-            Console.WriteLine("Rotated: " + newP);
 
             return newP;
         }

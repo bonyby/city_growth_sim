@@ -57,10 +57,6 @@ namespace CityGrowthSim.City
             Neighbourhood n = neighbourhoods[0];
             List<IStructure> candidates = new List<IStructure>(n.NewNeighbourCandidates.ToList());
 
-            // TODO: Look through neighbour candidates untill an available space has been found.
-            // just placing besides some candidate now without collision detection to prototype.
-
-            Random random = new Random(); // DISCLAIMER: temporary Random obj. Will be removed soon or replaced with perm. Random obj.
             if (candidates.Count == 0)
             {
                 IStructure h = structureFact.CreateHouse(new Point(random.Next(750), random.Next(500)));
@@ -83,7 +79,7 @@ namespace CityGrowthSim.City
 
                 // Check for available space next to each of the corners of the MBBox of the candidate
                 Point[] mBBox = cand.MinimumBoundingBox;
-                Console.WriteLine("##Cand MBBox##");
+                Console.WriteLine("\n\n##Cand MBBox##");
                 foreach (Point point in mBBox)
                 {
                     Console.WriteLine(point);
@@ -97,7 +93,7 @@ namespace CityGrowthSim.City
                     Point p_k = mBBox[(mBBox.Length + index - 1) % mBBox.Length]; // previous corner (needs to add the length of the array in case i=0 which results in -1 otherwise)
                     PointF dir_ji = PointUtility.DirectionTo(p_j, p_i);
                     PointF dir_ki = PointUtility.DirectionTo(p_k, p_i);
-                    float offset = 1;
+                    float offset = 1f;
                     float width = 50; // placeholder for now
                     float height = 50;
 
@@ -118,7 +114,8 @@ namespace CityGrowthSim.City
                     // Add the new house if an available plot found
                     if (!intersection)
                     {
-                        IStructure house = structureFact.CreateHouse(plot1, new PointF(-1, -1));
+                        Console.WriteLine("p_i: " + p_i + " plot[0]: " + plot1[0]);
+                        IStructure house = structureFact.CreateHouse(plot1, PointUtility.DirectionTo(plot1[0], p_i));
                         if (house != null)
                         {
                             n.AddStructure(house);
@@ -138,7 +135,8 @@ namespace CityGrowthSim.City
                     // Add the new house if an available plot found
                     if (!intersection)
                     {
-                        IStructure house = structureFact.CreateHouse(plot2, new PointF(-1, -1));
+                        Console.WriteLine("p_i: " + p_i + " plot[0]: " + plot2[0]);
+                        IStructure house = structureFact.CreateHouse(plot2, PointUtility.DirectionTo(plot2[0], p_i));
                         if (house != null)
                         {
                             n.AddStructure(house);

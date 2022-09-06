@@ -56,7 +56,7 @@ namespace CityGrowthSim.Utility
         }
 
         /// <summary>
-        /// Calculates the z-coordinate of the cross product between point_o1 and point_o2.
+        /// Calculates the z-coordinate of the cross product between point_oa and point_ob.
         /// If > 0 indicates a left turn, = 0 indicates collinearity and < 0 indicates a right turn (all for points arranged in counter clockwise order)
         /// </summary>
         /// <param name="a">Point </param>
