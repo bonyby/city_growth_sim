@@ -60,8 +60,7 @@ namespace CityGrowthSim.City
             if (candidates.Count == 0)
             {
                 IStructure h = structureFact.CreateHouse(new Point(random.Next(750), random.Next(500)));
-                //h.RotateCornersAroundCentroid(random.Next(360));
-                h.RotateCornersAroundCentroid(35);
+                h.RotateCornersAroundCentroid(random.Next(360));
                 n.AddStructure(h);
                 return;
             }

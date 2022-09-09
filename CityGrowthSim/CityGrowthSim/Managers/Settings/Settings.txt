@@ -1,7 +1,7 @@
 ﻿// PERSISTENT OBJECTS SETTINGS
 
 // either random or a 32-bit number
-RandomObjectSeed=4123
+RandomObjectSeed=random
 SimulationHz=30
 DefaultWindowWidth=1000
 DefaultWindowHeight=750
