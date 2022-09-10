@@ -53,7 +53,7 @@ namespace CityGrowthSim.Visualization.StructuresStrategies
 
         public void DrawWall(Graphics graphics, BaseWall wall, Pen borderPen)
         {
-            Color color = GetWallColor(); // Should create a Color class which loads colors from the settings..
+            Color color = GetWallColor(); // TODO: Should create a Color class which loads colors from the settings..
 
             Pen mainPen = new Pen(color, wall.Width);
 

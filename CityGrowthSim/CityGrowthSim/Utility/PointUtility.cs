@@ -331,6 +331,29 @@ namespace CityGrowthSim.Utility
         }
 
         /// <summary>
+        /// Calculates the angle between the two vectors a and b in degrees in [0; 360]
+        /// </summary>
+        /// <param name="a">Vector a</param>
+        /// <param name="b">Vector b</param>
+        /// <returns>The angle between a and b in degrees</returns>
+        public static double AngleBetween(PointF a, PointF b)
+        {
+            double determinant = a.X * b.Y - a.Y * b.X;
+            double angle = Math.Atan2(determinant, Dot(a, b)) * (180 / Math.PI);
+            return (angle + 360) % 360; // Move from [-180; 180] to [0; 360]
+        }
+
+        /// <summary>
+        /// Calculates the length of the vector described by a
+        /// </summary>
+        /// <param name="a">Vector a</param>
+        /// <returns>The length of the vector described by a</returns>
+        public static double Length(PointF a)
+        {
+            return Math.Sqrt(a.X * a.X + a.Y * a.Y);
+        }
+
+        /// <summary>
         /// Calculates the convex hull of the provided points.
         /// </summary>
         /// <param name="points">Points to generate convex hull of</param>
