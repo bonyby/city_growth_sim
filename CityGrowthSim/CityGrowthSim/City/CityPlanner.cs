@@ -80,61 +80,19 @@ namespace CityGrowthSim.City
                 for (int i = 0; i < mBBox.Length; i++)
                 {
                     int index = (i + iOffset) % mBBox.Length;
-                    Point p_i = mBBox[index];
-                    Point p_j = mBBox[(index + 1) % mBBox.Length]; // next corner
-                    Point p_k = mBBox[(mBBox.Length + index - 1) % mBBox.Length]; // previous corner (needs to add the length of the array in case i=0 which results in -1 otherwise)
-                    PointF dir_ji = PointUtility.DirectionTo(p_j, p_i);
-                    PointF dir_ki = PointUtility.DirectionTo(p_k, p_i);
-                    float offset = 1f; // these three are placeholder for now
-                    float width = 50; 
-                    float height = 50;
-
-                    // Generate potential plots to each side of the corner
-                    Point[] plot1 = GeneratePotentialPlot(p_i, dir_ji, dir_ki, offset, width, height);
-                    Point[] plot2 = GeneratePotentialPlot(p_i, dir_ki, dir_ji, offset, width, height);
+                    var plotData = GetPotentialPlots(mBBox, index);
 
                     // Check for an intersection with each structure in the neighbourhood except for the candidate itself
-                    bool intersection = false;
-                    List<IStructure> candList = new List<IStructure>();
-                    candList.Add(cand);
-                    foreach (IStructure structure in n.Structures.Except(candList))
+                    List<IStructure> candList = new List<IStructure>() { cand };
+                    List<IStructure> structsToCheck = n.Structures.Except(candList).ToList();
+                    bool structureAdded = false;
+
+                    for (int j = 0; j < plotData.plots.Length; j++)
                     {
-                        bool inter = PointUtility.CheckPolygonsIntersecting(plot1, structure.MinimumBoundingBox);
-                        if (inter) { intersection = true; break; }
+                        structureAdded = AddStructureIfPlotValid((plotData.plots[j], plotData.alignmentDirs[j]), structsToCheck);
                     }
 
-                    // Add the new house if an available plot found
-                    if (!intersection)
-                    {
-                        IStructure house = structureFact.CreateHouse(plot1, PointUtility.DirectionTo(plot1[0], p_i));
-                        if (house != null)
-                        {
-                            n.AddStructure(house);
-                            availablePlotFound = true;
-                            break;
-                        }
-                    }
-
-                    // !!!! JUST COPIED FOR NOW - SIMPLY TESTING !!!!!
-                    intersection = false;
-                    foreach (IStructure structure in n.Structures.Except(candList))
-                    {
-                        bool inter = PointUtility.CheckPolygonsIntersecting(plot2, structure.MinimumBoundingBox);
-                        if (inter) { intersection = true; break; }
-                    }
-
-                    // Add the new house if an available plot found
-                    if (!intersection)
-                    {
-                        Console.WriteLine("p_i: " + p_i + " plot[0]: " + plot2[0]);
-                        IStructure house = structureFact.CreateHouse(plot2, PointUtility.DirectionTo(plot2[0], p_i));
-                        if (house != null)
-                        {
-                            n.AddStructure(house);
-                            availablePlotFound = true;
-                            break;
-                        }
-                    }
+                    if (structureAdded) { availablePlotFound = true; break; } // break out of loop if a structure was succesfully added
                 }
 
                 // Remove candidate from future checks if no available space around it
@@ -144,9 +102,25 @@ namespace CityGrowthSim.City
 
             return;
 
-            (Point[] plot1, PointF alignDir1, Point[] plot2, PointF alignDir2) GetPotentialPlots(Point[] mBBox, int i) // Generates two potential plots for a given corner of the candidates MBBox
+            (Point[][] plots, PointF[] alignmentDirs) GetPotentialPlots(Point[] mBBox, int i) // Generates two potential plots for a given corner of the candidates MBBox (one to each of the available two sides)
             {
-                throw new NotImplementedException();
+                Point p_i = mBBox[i];
+                Point p_j = mBBox[(i + 1) % mBBox.Length]; // next corner
+                Point p_k = mBBox[(mBBox.Length + i - 1) % mBBox.Length]; // previous corner (needs to add the length of the array in case i=0 which results in -1 otherwise)
+                PointF dir_ji = PointUtility.DirectionTo(p_j, p_i);
+                PointF dir_ki = PointUtility.DirectionTo(p_k, p_i);
+                float offset = (float)(random.NextDouble() * 2 + 1); // these three are placeholder for now. TODO: maybe set the offset as a settings variable. Variable width/height?
+                float width = 50;
+                float height = 50;
+
+                // Generate potential plots to each side of the corner
+                Point[] plot1 = GeneratePotentialPlot(p_i, dir_ji, dir_ki, offset, width, height);
+                Point[] plot2 = GeneratePotentialPlot(p_i, dir_ki, dir_ji, offset, width, height);
+
+                Point[][] plots = new Point[][] { plot1, plot2 };
+                PointF[] alignDirs = new PointF[] { PointUtility.DirectionTo(plot1[0], p_i), PointUtility.DirectionTo(plot2[0], p_i) };
+
+                return (plots, alignDirs);
             }
 
             Point[] GeneratePotentialPlot(PointF pos, PointF primaryDir, PointF secondaryDir, float offset, float width, float height)
@@ -161,6 +135,37 @@ namespace CityGrowthSim.City
                 PointF p_3 = PointUtility.Subtract(p_2, primWidth);
 
                 return PointUtility.ConvertPointFsToPoints(new PointF[] { p_0, p_1, p_2, p_3 });
+            }
+
+            bool AddStructureIfPlotValid((Point[] plot, PointF alignmentDir) plotData, List<IStructure> structures)
+            {
+                bool valid = ValidPlot(plotData.plot, structures);
+
+                // Add the new structure (house for now) if an available plot found
+                if (valid)
+                {
+                    IStructure house = structureFact.CreateHouse(plotData.plot, plotData.alignmentDir);
+                    if (house != null)
+                    {
+                        n.AddStructure(house);
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            bool ValidPlot(Point[] plot, List<IStructure> structures) // Checks if the plot is valid (no intersection with other structures)
+            {
+                bool intersection = false;
+
+                foreach (IStructure structure in structures)
+                {
+                    bool inter = PointUtility.CheckPolygonsIntersecting(plot, structure.MinimumBoundingBox);
+                    if (inter) { intersection = true; break; }
+                }
+
+                return !intersection;
             }
         }
 
