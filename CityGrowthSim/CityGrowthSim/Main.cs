@@ -33,8 +33,6 @@ namespace CityGrowthSim
             int width = settingsMan.GetSettingsValueAsInt("DefaultWindowWidth");
             int height = settingsMan.GetSettingsValueAsInt("DefaultWindowHeight");
 
-            Console.WriteLine("Angle: " + PointUtility.AngleBetween(new PointF(8.93f, 1.75f), new PointF(-4.02f, -5.46f)));
-
             Size = new Size(width, height);
         }
 

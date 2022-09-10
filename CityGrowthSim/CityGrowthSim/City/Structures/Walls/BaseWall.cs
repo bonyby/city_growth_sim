@@ -9,6 +9,8 @@ namespace CityGrowthSim.City.Structures.Walls
 {
     internal abstract class BaseWall : BaseStructure
     {
+        // TODO: Should probably take an argument in the constructor to define whether or not the wall is cyclic/connected/continuous
+
         protected BaseWall(Point position, float width) : base(position)
         {
             this.Width = width;
