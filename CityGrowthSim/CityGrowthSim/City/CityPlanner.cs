@@ -90,6 +90,7 @@ namespace CityGrowthSim.City
                     for (int j = 0; j < plotData.plots.Length; j++)
                     {
                         structureAdded = AddStructureIfPlotValid((plotData.plots[j], plotData.alignmentDirs[j]), structsToCheck);
+                        if (structureAdded) break;
                     }
 
                     if (structureAdded) { availablePlotFound = true; break; } // break out of loop if a structure was succesfully added
