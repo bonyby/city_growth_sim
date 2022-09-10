@@ -51,6 +51,8 @@
   <ItemGroup>
     <Compile Include="City\CityPlanner.cs" />
     <Compile Include="City\Neighbourhoods\Neighbourhood.cs" />
+    <Compile Include="City\Structures\Walls\BaseWall.cs" />
+    <Compile Include="City\Structures\Walls\Palisade.cs" />
     <Compile Include="Factories\PersistentObjectsFactory.cs" />
     <Compile Include="Factories\ShapeFactory.cs" />
     <Compile Include="Factories\StructureFactory.cs" />

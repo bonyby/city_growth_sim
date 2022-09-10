@@ -1,5 +1,6 @@
 ﻿using CityGrowthSim.City;
 using CityGrowthSim.City.Structures;
+using CityGrowthSim.City.Structures.Walls;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -28,22 +29,40 @@ namespace CityGrowthSim.Visualization.StructuresStrategies
         public void DrawStructures(Graphics graphics)
         {
             Brush mainBrush = new SolidBrush(MainColor);
-            //Brush mBBoxBrush = new SolidBrush(Color.FromArgb(80, 0, 0, 255));
             Pen borderPen = new Pen(BorderColor, BorderWidth);
 
             List<IStructure> structures = cityPlanner.GetAllStructures();
 
             foreach (IStructure s in structures)
             {
-                graphics.FillPolygon(mainBrush, s.GlobalCorners);
-                //graphics.FillPolygon(mBBoxBrush, s.MinimumBoundingBox);
-
-                List<Point> points = s.GlobalCorners.ToList();
-                points.Add(s.GlobalCorners[0]); // Append the first point to draw the last remaining line segment
-                graphics.DrawLines(borderPen, points.ToArray());
+                if (s is BaseWall) DrawWall(graphics, (BaseWall)s, borderPen);  // Draw wall
+                else DrawStructure(graphics, s, mainBrush, borderPen);          // Default draw structure
             }
 
             mainBrush.Dispose();
+        }
+
+        public void DrawStructure(Graphics graphics, IStructure structure, Brush brush, Pen pen)
+        {
+            graphics.FillPolygon(brush, structure.GlobalCorners);
+
+            List<Point> points = structure.GlobalCorners.ToList();
+            points.Add(structure.GlobalCorners[0]); // Append the first point to draw the last remaining line segment
+            graphics.DrawLines(pen, points.ToArray());
+        }
+
+        public void DrawWall(Graphics graphics, BaseWall wall, Pen borderPen)
+        {
+            Color color = GetWallColor(); // Should create a Color class which loads colors from the settings..
+
+            Pen mainPen = new Pen(color, wall.Width);
+
+            graphics.DrawLines(mainPen, wall.GlobalCorners);
+
+            Color GetWallColor()
+            {
+                return Color.SaddleBrown;
+            }
         }
     }
 }

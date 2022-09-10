@@ -1,5 +1,6 @@
 ﻿using CityGrowthSim.City.Neighbourhoods;
 using CityGrowthSim.City.Structures;
+using CityGrowthSim.City.Structures.Walls;
 using CityGrowthSim.Factories;
 using CityGrowthSim.Managers;
 using CityGrowthSim.Utility;
@@ -16,6 +17,7 @@ namespace CityGrowthSim.City
     {
         private TimeManager timeManager;
         List<Neighbourhood> neighbourhoods;
+        List<BaseWall> walls;
         private StructureFactory structureFact;
         private Random random;
 
@@ -28,6 +30,12 @@ namespace CityGrowthSim.City
 
             // Create initial neighbourhood
             CreateNewNeighbourhood();
+            walls = new List<BaseWall>();
+
+            // Create a wall - just a test for now
+            Point[] corners = new Point[] { new Point(50, 50), new Point(75, 50), new Point(100, 60), new Point(125, 150), new Point(110, 225), new Point(65, 260) };
+            BaseWall wall = new Palisade(corners[0], corners, 12);
+            walls.Add(wall);
         }
 
         /// <summary>
@@ -38,10 +46,14 @@ namespace CityGrowthSim.City
         {
             List<IStructure> s = new List<IStructure>();
 
+            // Add structures from neighbourhoods
             foreach (Neighbourhood neighbourhood in neighbourhoods)
             {
                 s.AddRange(neighbourhood.Structures);
             }
+
+            // Add walls
+            s.AddRange(walls);
 
             return s;
         }
@@ -49,7 +61,7 @@ namespace CityGrowthSim.City
         private void TimeManager_UpdateReached(object sender, EventArgs e)
         {
             // Simple logic for now. Simply add a structure at each update to the single neighbourhood available.
-            AddNewStructure();
+            //AddNewStructure();
         }
 
         private void AddNewStructure()
